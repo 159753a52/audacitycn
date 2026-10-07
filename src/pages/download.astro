@@ -2,19 +2,13 @@
 import Base from '../layouts/Base.astro';
 import DownloadPanel from '../components/DownloadPanel.astro';
 import downloads from '../data/downloads.json';
-const primary=downloads.files[0];
-const hasMirrors=downloads.mirrors.some(m=>m.enabled);
-const softwareSchema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'Audacity',softwareVersion:downloads.version,operatingSystem:'Windows 10, Windows 11',applicationCategory:'MultimediaApplication',url:'https://www.audacityteam.org/',downloadUrl:primary.url,isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
+const availableFiles=downloads.files.filter(f=>f.id!=='windows-arm64');
+const softwareSchema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'Audacity',softwareVersion:downloads.version,operatingSystem:'Windows 10, Windows 11',applicationCategory:'MultimediaApplication',url:'https://www.audacityteam.org/',downloadUrl:'https://audacitycn.com/download/',isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
 ---
-<Base title={`Audacity ${downloads.version} 中文下载：Windows 安装版与便携版`} description="下载 Audacity 4.0.1 Windows 原始文件：x64 MSI、ARM64 MSI 与 x64 7Z 便携版。列出文件名、SHA-256、官方来源及可用网盘镜像，帮助选择架构。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
-  <div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 下载</nav><h1>Audacity {downloads.version} 中文下载</h1><p class="lead">下面是 Audacity 官方发布的 Windows 原始文件。程序支持多语言界面，无需另找收费汉化包。本站镜像保留原始安装包、许可信息和对应源码。</p></header>
-  <div class="download-summary"><strong>{downloads.version}</strong><span>免费开源</span><span>来源核对：<time datetime={downloads.verified}>{downloads.verified}</time></span><a href={downloads.release} target="_blank" rel="noopener noreferrer">官方发布记录 ↗</a></div>
-  <section class="download-primary"><div><h2>普通 Intel / AMD 电脑：选 x64 安装版</h2><p>适用于常见 Windows 10 / 11 电脑。只有系统明确写着 ARM 时才选择 ARM64。</p>{hasMirrors&&<a class="text-link mirror-jump" href="#mirror-heading">官网连接慢？使用网盘镜像 →</a>}</div><a class="button" href={primary.url}>下载 x64 MSI</a></section>
-  <h2 style="font-size:22px">原始文件与校验值</h2><p class="fine">系统类型在 Windows 设置 → 系统 → 关于中查看。每个文件的下载与校验入口列在一起。</p>
-  <div class="download-files">{downloads.files.map(f=><section class="download-file" aria-labelledby={`file-${f.id}`}><div><h3 id={`file-${f.id}`}>{f.title}</h3><p>{f.description}</p><code class="file-name">{new URL(f.url).pathname.split('/').pop()}</code></div><div class="file-controls"><a class="button secondary" href={f.url} aria-label={`${f.title}：从官方 GitHub 下载`}>下载原始 {f.format} ↓</a><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code><button class="copy" data-copy={f.sha256}>复制校验值</button></details></div></section>)}</div>
-  <div class="download-options"><a href="https://www.audacityteam.org/download/mac/" target="_blank" rel="noopener noreferrer">macOS 官网下载 ↗</a><a href="https://www.audacityteam.org/download/linux/" target="_blank" rel="noopener noreferrer">Linux 官网下载 ↗</a><a href={downloads.release} target="_blank" rel="noopener noreferrer">历史发布与源代码 ↗</a></div>
-  <DownloadPanel />
-  <section class="download-info"><h2>安装版和便携版有什么区别？</h2><p>MSI 通过安装向导部署。7Z 是便携压缩包，先完整解压，再运行文件夹中的程序。不要只把可执行文件从包里拖出来。两种方式都建议把正在编辑的工程保存在本机磁盘。</p><h2>如何检查文件是不是完整的？</h2><p>文件名、版本和架构应与表格一致。在 PowerShell 中运行 <code>Get-FileHash "文件完整路径" -Algorithm SHA256</code>，将输出与表格展开后的校验值对照。下载中断或 Hash 不一致时，重新下载核对。</p><h2>ARM64 和旧系统需要留意什么？</h2><p>当前 ARM64 版要求 Windows 11 或更高版本，不支持插件，FFmpeg 也要选 WoA 版本。官方主要测试 Windows 10 / 11；旧系统应查官方历史版本说明，不能只按“64 位”选一个包。</p><h2>下载之后做什么？</h2><ul><li><a href="/guides/install/">按安装教程检查系统类型、语言和启动。</a></li><li><a href="/guides/record-voice/">录 10 秒麦克风声音，确认设备和电平。</a></li><li><a href="/guides/export-audio/">保存工程，再导出播放器可用的 MP3 或 WAV。</a></li></ul><p class="fine">来源：<a href={downloads.official} target="_blank" rel="noopener noreferrer">Audacity 官方 Windows 下载页</a>。本站是独立中文指南。</p></section>
-  </div>
-</Base>
+<Base title={`Audacity ${downloads.version} 网盘下载：安装版与便携版`} description="通过夸克、百度、UC 网盘下载 Audacity 4.0.1 Windows x64 原始安装版和便携版。提供分享二维码、提取码、原始文件名、SHA-256 与安装说明。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
+<script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+<div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 下载</nav><h1>Audacity {downloads.version} 网盘下载</h1><p class="lead">选择下方网盘，扫码或打开分享链接获取原始文件。网盘中包含 Windows x64 安装版、便携版、对应源码、许可证与校验文件。</p></header>
+<div class="download-summary"><strong>{downloads.version}</strong><span>免费开源</span><span>来源核对：<time datetime={downloads.verified}>{downloads.verified}</time></span><span>原始发布文件，未重新打包</span></div>
+<DownloadPanel />
+<section class="download-info"><h2>文件名与校验值</h2><p>普通 Intel / AMD 电脑使用 Windows x64。下载后按文件名核对版本；校验值用于检查从网盘保存的文件是否完整。</p>{availableFiles.map(f=><section class="file-reference"><h3>{f.title}</h3><p>{f.description}</p><code class="file-name">{new URL(f.url).pathname.split('/').pop()}</code><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code><button class="copy" data-copy={f.sha256}>复制校验值</button></details></section>)}<h2>安装版和便携版有什么区别？</h2><p>MSI 按安装向导部署。7Z 需要完整解压后运行，不要只把可执行文件单独拖出来。工作中的工程先保存在本机磁盘，完成后再备份。</p><h2>下载之后做什么？</h2><ul><li><a href="/guides/install/">按安装教程检查架构和首次启动。</a></li><li><a href="/guides/record-voice/">用 10 秒录音检查麦克风和电平。</a></li><li><a href="/guides/export-audio/">保存工程，再导出 MP3 或 WAV。</a></li></ul><p class="fine">文件来源：Audacity 项目的官方发布记录。本站提供网盘分享入口。</p></section>
+</div></Base>
