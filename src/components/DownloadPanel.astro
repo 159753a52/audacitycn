@@ -1,9 +1,58 @@
 ---
 import QRCode from 'qrcode';
 import downloads from '../data/downloads.json';
-import { validateDownloads } from '../../scripts/config.mjs';
+import { architectureNames } from '../data/platforms';
+import { validateDownloads, availableMirrors } from '../../scripts/config.mjs';
 validateDownloads(downloads);
-const { entries = downloads.mirrors, heading = '选择网盘下载', headingId = 'mirror-heading' } = Astro.props;
-const mirrors = await Promise.all(entries.filter(x => x.enabled).map(async m => ({ ...m, qr: await QRCode.toDataURL(m.url, { width: 320, margin: 3, errorCorrectionLevel: 'M', color: { dark: '#232d2b', light: '#ffffff' } }) })));
+const { platform } = Astro.props;
+const groups = [downloads, downloads.legacy];
+const architectures = [...new Set(groups.flatMap(g=>g.files.filter(f=>f.platform===platform.id).map(f=>f.architecture)))];
+const initialArchitecture = platform.defaultArchitecture;
+const entries = await Promise.all(groups.flatMap(g=>g.mirrors.filter(m=>m.enabled && m.scope.some(s=>s.startsWith(`${platform.id}:`))).map(async m=>({ ...m, qr: 'qrImage' in m ? m.qrImage : await QRCode.toDataURL(m.url, {width:320,margin:3,errorCorrectionLevel:'M',color:{dark:'#232d2b',light:'#ffffff'}}) }))));
+const providers = [...new Map(entries.map(m=>[m.id,m.name])).entries()];
+const initialProvider = availableMirrors(downloads,platform.id,initialArchitecture)[0].id;
 ---
-{mirrors.length > 0 && <section class="mirror-panel" aria-labelledby={headingId}><h2 id={headingId}>{heading}</h2><p class="fine">扫码或打开你使用的网盘，按文件名选择对应版本。登录、转存和客户端要求以网盘提示为准。</p><div class="netdisk-grid">{mirrors.map(m => <section class="netdisk-entry"><h3>{m.name}</h3><p class="fine">Audacity {m.version}<br />{m.fileLabel}</p><img class="netdisk-qr" src={m.qr} alt={`${m.name} Audacity ${m.version} 下载二维码`} width="200" height="200" loading="lazy" />{m.code ? <p class="extraction-code">提取码：<strong>{m.code}</strong> <button class="copy" data-copy={m.code}>复制</button></p> : <p class="extraction-code">无需提取码</p>}<a class="button" href={m.url} rel={m.affiliate ? 'sponsored noopener noreferrer' : 'noopener noreferrer'} target="_blank">打开{m.name} ↗</a><button class="copy copy-share" data-copy={m.url}>复制分享链接</button></section>)}</div>{mirrors.some(x => x.affiliate) && <p class="fine">推广说明：通过这些网盘链接产生符合平台规则的行为，本站可能获得佣金。Audacity 本身免费，使用软件不要求购买网盘会员。</p>}</section>}
+<section class="download-picker" data-platform={platform.id} data-default-architecture={initialArchitecture} aria-labelledby="choose-download">
+  <h2 id="choose-download">选择版本与网盘</h2>
+  <div class="picker-controls">
+    <label for="download-version"><span>1 · 版本</span><select id="download-version">{groups.map((g,i)=><option value={g.version}>{g.version}{i===0?' · 当前版':' · 3.x 旧版'}</option>)}</select></label>
+    <label for="download-architecture"><span>2 · 电脑类型</span><select id="download-architecture">{architectures.map(a=><option value={a} selected={a===initialArchitecture} data-versions={groups.filter(g=>g.files.some(f=>f.platform===platform.id && f.architecture===a)).map(g=>g.version).join(' ')} hidden={!downloads.files.some(f=>f.platform===platform.id && f.architecture===a)} disabled={!downloads.files.some(f=>f.platform===platform.id && f.architecture===a)}>{platform.id==='macos' && a==='arm64'?'Apple Silicon（M 系列）':platform.id==='macos' && a==='x64'?'Intel Mac':architectureNames[a]}</option>)}</select></label>
+    <label for="download-provider"><span>3 · 网盘</span><select id="download-provider">{providers.map(([id,name])=><option value={id} selected={id===initialProvider}>{name}</option>)}</select></label>
+  </div>
+  <p class="fine picker-hint">分享按版本整理。进入网盘后，按下方文件名选择你的系统与架构。</p>
+  <div class="selected-download" aria-live="polite" aria-atomic="true">
+    {entries.map(m=><section class="share-choice" data-share-version={m.version} data-provider={m.id} data-scope={m.scope.join(' ')} hidden={m.version!==downloads.version || m.id!==initialProvider}>
+      <div class="qr-column"><img class="selected-qr" src={m.qr} alt={`${m.name} Audacity ${m.version} ${'qrKind' in m?'微信小程序码':'分享二维码'}`} width="220" height="220" /><p class="scan-caption">{'qrKind' in m ? '微信扫一扫' : '扫码打开分享'}</p></div>
+      <div class="share-details"><h3>{m.name} · Audacity {m.version}</h3><p>{m.fileLabel}</p>{'qrKind' in m ? <><p class="extraction-code">平台生成的微信小程序码，已含提取码。</p><p class="fine">请用微信扫一扫；同一手机可保存图片后，用微信扫一扫从相册识别。普通浏览器扫码工具不适用。</p><a class="button secondary" href={m.qr} download={`Audacity-${m.version}-迅雷分享码.png`}>保存迅雷分享码</a></> : <><p class="extraction-code">{m.code ? <>提取码：<strong>{m.code}</strong> <button class="copy" data-copy={m.code}>复制提取码</button></> : '无需提取码'}</p><div class="actions"><a class="button" href={m.url} target="_blank" rel={m.affiliate?'sponsored noopener noreferrer':'noopener noreferrer'}>打开{m.name} ↗</a><button class="copy" data-copy={m.url}>复制分享链接</button></div><a class="share-url" href={m.url} target="_blank" rel="noopener noreferrer">{m.url}</a></>}{m.affiliate && <p class="fine">推广说明：符合平台规则的行为可能为本站产生佣金。Audacity 免费，使用软件不要求购买网盘会员。</p>}</div>
+    </section>)}
+  </div>
+  <p class="fine">登录、转存、下载速度及客户端要求由网盘决定。文件为原始发布包，未重新打包。{platform.id==='windows'?'百度分享仅覆盖 4.0.1 的 Windows x64。':''}</p>
+  <noscript><p>浏览器未启用 JavaScript，可直接选择以下分享：</p><ul>{entries.filter(m=>!('linkEnabled' in m) || m.linkEnabled!==false).map(m=><li><a href={m.url}>{m.version} · {m.name}</a>{m.code && `（提取码 ${m.code}）`}{m.id==='baidu'?' · 仅 Windows x64':''}</li>)}</ul></noscript>
+</section>
+<section class="download-info file-catalog" aria-labelledby="file-list-heading">
+  <h2 id="file-list-heading">对应文件名与校验值</h2><p class="fine">这里列出当前选择的文件。下载后可用 SHA-256 与官方发布记录核对完整性。</p>
+  {groups.map(g=><div data-file-version={g.version} hidden={g.version!==downloads.version}>
+    {g.files.filter(f=>f.platform===platform.id).map(f=><section class="file-reference" data-file-architecture={f.architecture} hidden={f.architecture!==initialArchitecture}><h3>{f.title}</h3><p class="file-size">{f.format} · {(f.bytes/1024/1024).toFixed(1)} MiB</p><code class="file-name">{f.filename}</code><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code><button class="copy" data-copy={f.sha256}>复制校验值</button></details></section>)}
+    <details class="source-files"><summary>对应源码{g.version===downloads.legacy.version?'、离线手册':''}与许可证</summary><p class="fine">同一版本分享中还提供源码、LICENSE.txt、CHECKSUMS.txt 和来源说明。源码压缩包保留官方原文件。</p>{g.files.filter(f=>f.platform==='shared').map(f=><div class="file-reference"><strong>{f.title} · {f.format}</strong><p><code class="file-name">{f.filename}</code></p><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code></details></div>)}</details>
+  </div>)}
+</section>
+<script>
+  const picker=document.querySelector<HTMLElement>('.download-picker');
+  if(picker){
+    const version=picker.querySelector<HTMLSelectElement>('#download-version')!;
+    const architecture=picker.querySelector<HTMLSelectElement>('#download-architecture')!;
+    const provider=picker.querySelector<HTMLSelectElement>('#download-provider')!;
+    const shares=[...picker.querySelectorAll<HTMLElement>('[data-share-version]')];
+    function update(){
+      for(const option of architecture.options){option.disabled=!option.dataset.versions?.split(' ').includes(version.value);option.hidden=option.disabled;}
+      if(architecture.selectedOptions[0].disabled)architecture.value=[...architecture.options].find(o=>!o.disabled && o.value===picker!.dataset.defaultArchitecture)?.value || [...architecture.options].find(o=>!o.disabled)!.value;
+      const available=shares.filter(s=>s.dataset.shareVersion===version.value && (s.dataset.scope!.split(' ').includes(`${picker!.dataset.platform}:*`)||s.dataset.scope!.split(' ').includes(`${picker!.dataset.platform}:${architecture.value}`)));
+      for(const option of provider.options){option.disabled=!available.some(s=>s.dataset.provider===option.value);option.hidden=option.disabled;}
+      if(provider.selectedOptions[0].disabled)provider.value=available[0].dataset.provider!;
+      for(const share of shares)share.hidden=!available.includes(share)||share.dataset.provider!==provider.value;
+      document.querySelectorAll<HTMLElement>('[data-file-version]').forEach(group=>{group.hidden=group.dataset.fileVersion!==version.value;group.querySelectorAll<HTMLElement>('[data-file-architecture]').forEach(file=>file.hidden=file.dataset.fileArchitecture!==architecture.value);});
+    }
+    [version,architecture,provider].forEach(select=>select.addEventListener('change',update));
+    update();
+  }
+</script>

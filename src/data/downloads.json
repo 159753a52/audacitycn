@@ -1,35 +1,118 @@
 {
   "version": "4.0.1",
   "verified": "2026-10-07",
-  "official": "https://www.audacityteam.org/download/windows/",
+  "official": "https://www.audacityteam.org/download/",
   "release": "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1",
   "files": [
     {
-      "id": "windows-x64",
-      "title": "Windows x64 安装版",
-      "tag": "大多数电脑选这个",
-      "format": "MSI",
-      "description": "适用于常见的 Intel / AMD 64 位电脑。推荐 Windows 10、Windows 11 用户选择。",
-      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-x86_64.msi",
-      "sha256": "efb652bf04168f5d4893f28b7cefaaf5ef385d9251544540ac774e3bf54793a3"
+      "id": "audacity-linux-4.0.1-aarch64.AppImage",
+      "filename": "audacity-linux-4.0.1-aarch64.AppImage",
+      "title": "Linux ARM64 AppImage",
+      "platform": "linux",
+      "architecture": "arm64",
+      "format": "AppImage",
+      "bytes": 70666760,
+      "sha256": "3abc517f26f00197eaac9c4e56b35dc53d8e933764b41077950e8526cd4aa075",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-linux-4.0.1-aarch64.AppImage"
     },
     {
-      "id": "windows-portable",
-      "title": "Windows x64 便携版",
-      "tag": "解压后使用",
-      "format": "7Z",
-      "description": "适合希望单独管理程序文件夹的用户。先完整解压，再打开程序；项目文件保存在本机磁盘。",
-      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-x86_64.7z",
-      "sha256": "9c5e0379626dee8a573af91ba5355311b9001dcf310294dd4dc9aa6887593d03"
+      "id": "audacity-linux-4.0.1-x86_64.AppImage",
+      "filename": "audacity-linux-4.0.1-x86_64.AppImage",
+      "title": "Linux Intel / AMD x64 AppImage",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "AppImage",
+      "bytes": 73755128,
+      "sha256": "ca2f04f172124d1f18ac608749854c5d31f04ab266a758c348190c05d9b2087c",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-linux-4.0.1-x86_64.AppImage"
     },
     {
-      "id": "windows-arm64",
+      "id": "audacity-macOS-4.0.1-arm64.dmg",
+      "filename": "audacity-macOS-4.0.1-arm64.dmg",
+      "title": "macOS ARM64 DMG",
+      "platform": "macos",
+      "architecture": "arm64",
+      "format": "DMG",
+      "bytes": 50034126,
+      "sha256": "278c8647b78c77af7f07dbd5e7d9bfc950bc14168047b65738716b61d12055ec",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-macOS-4.0.1-arm64.dmg"
+    },
+    {
+      "id": "audacity-macOS-4.0.1-universal.dmg",
+      "filename": "audacity-macOS-4.0.1-universal.dmg",
+      "title": "macOS 通用版 DMG",
+      "platform": "macos",
+      "architecture": "universal",
+      "format": "DMG",
+      "bytes": 92003045,
+      "sha256": "473db7ce0d846d2d45df97e8e83ff4c70fc835eff6bcc9e119d8eac34f979794",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-macOS-4.0.1-universal.dmg"
+    },
+    {
+      "id": "audacity-macOS-4.0.1-x86_64.dmg",
+      "filename": "audacity-macOS-4.0.1-x86_64.dmg",
+      "title": "macOS Intel x64 DMG",
+      "platform": "macos",
+      "architecture": "x64",
+      "format": "DMG",
+      "bytes": 54321871,
+      "sha256": "9794b0b3a3a795bdc097b411a5776ba59dc451cb1524f58c9714c30cca2564be",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-macOS-4.0.1-x86_64.dmg"
+    },
+    {
+      "id": "audacity-sources-4.0.1.tar.xz",
+      "filename": "audacity-sources-4.0.1.tar.xz",
+      "title": "对应源码",
+      "platform": "shared",
+      "architecture": "all",
+      "format": "TAR.XZ",
+      "bytes": 190348052,
+      "sha256": "6cf1230a1aa940a9188476737d342100c5de6480a476f253fc844bd031d7e6f4",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-sources-4.0.1.tar.xz"
+    },
+    {
+      "id": "audacity-win-4.0.1-arm64.msi",
+      "filename": "audacity-win-4.0.1-arm64.msi",
       "title": "Windows ARM64 安装版",
-      "tag": "ARM 设备专用",
+      "platform": "windows",
+      "architecture": "arm64",
       "format": "MSI",
-      "description": "适合 Windows 11 ARM 设备。官方说明此版本暂不支持插件，FFmpeg 也需匹配 ARM 版本。",
-      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-arm64.msi",
-      "sha256": "b6606d9bcb1a49254f1966c7edc68d78f7eadd04eebe7d4676350f32ca675f49"
+      "bytes": 38264832,
+      "sha256": "b6606d9bcb1a49254f1966c7edc68d78f7eadd04eebe7d4676350f32ca675f49",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-arm64.msi"
+    },
+    {
+      "id": "audacity-win-4.0.1-arm64.7z",
+      "filename": "audacity-win-4.0.1-arm64.7z",
+      "title": "Windows ARM64 便携版",
+      "platform": "windows",
+      "architecture": "arm64",
+      "format": "7Z",
+      "bytes": 32798863,
+      "sha256": "bafa562f9fc3960eae50ac64b656360b5bd2824af3396ed0809551a1f8eb716e",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-arm64.7z"
+    },
+    {
+      "id": "audacity-win-4.0.1-x86_64.msi",
+      "filename": "audacity-win-4.0.1-x86_64.msi",
+      "title": "Windows Intel / AMD x64 安装版",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "MSI",
+      "bytes": 49795072,
+      "sha256": "efb652bf04168f5d4893f28b7cefaaf5ef385d9251544540ac774e3bf54793a3",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-x86_64.msi"
+    },
+    {
+      "id": "audacity-win-4.0.1-x86_64.7z",
+      "filename": "audacity-win-4.0.1-x86_64.7z",
+      "title": "Windows Intel / AMD x64 便携版",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "7Z",
+      "bytes": 44322940,
+      "sha256": "9c5e0379626dee8a573af91ba5355311b9001dcf310294dd4dc9aa6887593d03",
+      "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-x86_64.7z"
     }
   ],
   "mirrors": [
@@ -40,7 +123,12 @@
       "url": "https://pan.quark.cn/s/3881781d92f4",
       "code": "",
       "version": "4.0.1",
-      "fileLabel": "Windows x64 安装版、便携版及对应源码",
+      "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+      "scope": [
+        "windows:*",
+        "macos:*",
+        "linux:*"
+      ],
       "affiliate": false
     },
     {
@@ -51,17 +139,266 @@
       "code": "7mu2",
       "version": "4.0.1",
       "fileLabel": "Windows x64 安装版、便携版及对应源码",
+      "scope": [
+        "windows:x64"
+      ],
       "affiliate": false
     },
     {
       "id": "uc",
-      "name": "UC网盘",
+      "name": "UC 网盘",
       "enabled": true,
-      "url": "https://drive.uc.cn/s/72e7381242444?public=1",
+      "url": "https://drive.uc.cn/s/e9d5158571534?public=1",
       "code": "",
       "version": "4.0.1",
-      "fileLabel": "Windows x64 安装版、便携版及对应源码",
+      "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+      "scope": [
+        "windows:*",
+        "macos:*",
+        "linux:*"
+      ],
       "affiliate": false
+    },
+    {
+      "id": "xunlei",
+      "name": "迅雷网盘",
+      "enabled": true,
+      "url": "https://pan.xunlei.com/s/VP3KwJosQTzr1dtY8dQ6Cn92A1",
+      "code": "",
+      "version": "4.0.1",
+      "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+      "scope": [
+        "windows:*",
+        "macos:*",
+        "linux:*"
+      ],
+      "affiliate": false,
+      "qrImage": "/netdisk-qr/xunlei-4.0.1.png",
+      "qrKind": "wechat-mini",
+      "linkEnabled": false
     }
-  ]
+  ],
+  "legacy": {
+    "version": "3.7.9",
+    "verified": "2026-10-07",
+    "official": "https://www.audacityteam.org/download/",
+    "release": "https://github.com/audacity/audacity/releases/tag/Audacity-3.7.9",
+    "files": [
+      {
+        "id": "audacity-linux-3.7.9-x64-20.04.AppImage",
+        "filename": "audacity-linux-3.7.9-x64-20.04.AppImage",
+        "title": "Linux Intel / AMD x64 AppImage（20.04）",
+        "platform": "linux",
+        "architecture": "x64",
+        "format": "AppImage",
+        "bytes": 123976184,
+        "sha256": "137a222e6a9730ceb2dd9a61b3abea4a511ad47b1cf6c1e72426ee671c75f655",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-linux-3.7.9-x64-20.04.AppImage"
+      },
+      {
+        "id": "audacity-linux-3.7.9-x64-22.04.AppImage",
+        "filename": "audacity-linux-3.7.9-x64-22.04.AppImage",
+        "title": "Linux Intel / AMD x64 AppImage（22.04）",
+        "platform": "linux",
+        "architecture": "x64",
+        "format": "AppImage",
+        "bytes": 112552440,
+        "sha256": "e03f51163e370277039c2f2f665376a86b56aa51c9056aba00f8712d889ed654",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-linux-3.7.9-x64-22.04.AppImage"
+      },
+      {
+        "id": "audacity-macOS-3.7.9-arm64.dmg",
+        "filename": "audacity-macOS-3.7.9-arm64.dmg",
+        "title": "macOS ARM64 DMG",
+        "platform": "macos",
+        "architecture": "arm64",
+        "format": "DMG",
+        "bytes": 31370830,
+        "sha256": "fafeb7fa963d3e2ba05ee7aba5290c966362ac5f5feca86eb8b1f61c7819d499",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-macOS-3.7.9-arm64.dmg"
+      },
+      {
+        "id": "audacity-macOS-3.7.9-universal.dmg",
+        "filename": "audacity-macOS-3.7.9-universal.dmg",
+        "title": "macOS 通用版 DMG",
+        "platform": "macos",
+        "architecture": "universal",
+        "format": "DMG",
+        "bytes": 69550559,
+        "sha256": "5d4fe9125fc79aec3d6d67677407afda42229ae86a37c2a65d99b0df1cd95a24",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-macOS-3.7.9-universal.dmg"
+      },
+      {
+        "id": "audacity-macOS-3.7.9-universal.pkg",
+        "filename": "audacity-macOS-3.7.9-universal.pkg",
+        "title": "macOS 通用版 PKG",
+        "platform": "macos",
+        "architecture": "universal",
+        "format": "PKG",
+        "bytes": 69576947,
+        "sha256": "ea15b556a08b8af51344fe872aa2c396aa6f6491e447b4c8f7edc12d7b986cfd",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-macOS-3.7.9-universal.pkg"
+      },
+      {
+        "id": "audacity-macOS-3.7.9-x86_64.dmg",
+        "filename": "audacity-macOS-3.7.9-x86_64.dmg",
+        "title": "macOS Intel x64 DMG",
+        "platform": "macos",
+        "architecture": "x64",
+        "format": "DMG",
+        "bytes": 33643297,
+        "sha256": "142f3900bea5d49a73e66cce06e156b8e5387643e1b718806e85286753d6294f",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-macOS-3.7.9-x86_64.dmg"
+      },
+      {
+        "id": "audacity-manual-3.7.9.tar.gz",
+        "filename": "audacity-manual-3.7.9.tar.gz",
+        "title": "离线手册",
+        "platform": "shared",
+        "architecture": "all",
+        "format": "TAR.GZ",
+        "bytes": 26577174,
+        "sha256": "890a416172ddf6e34e6b2b49b062be3130202a4d5ad359c95d6d271118c5fb89",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-manual-3.7.9.tar.gz"
+      },
+      {
+        "id": "audacity-manual-3.7.9.zip",
+        "filename": "audacity-manual-3.7.9.zip",
+        "title": "离线手册",
+        "platform": "shared",
+        "architecture": "all",
+        "format": "ZIP",
+        "bytes": 28065998,
+        "sha256": "4d849320e67e8bb04168ec5e4c17885b717d6449329e4645013401e1bba85550",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-manual-3.7.9.zip"
+      },
+      {
+        "id": "audacity-sources-3.7.9.tar.gz",
+        "filename": "audacity-sources-3.7.9.tar.gz",
+        "title": "对应源码",
+        "platform": "shared",
+        "architecture": "all",
+        "format": "TAR.GZ",
+        "bytes": 67634190,
+        "sha256": "9d224ebe4d5c4e38e3a2142ef6d36198d5c40db0e32329d7fbc547cce7422682",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-sources-3.7.9.tar.gz"
+      },
+      {
+        "id": "audacity-win-3.7.9-arm64.exe",
+        "filename": "audacity-win-3.7.9-arm64.exe",
+        "title": "Windows ARM64 安装版",
+        "platform": "windows",
+        "architecture": "arm64",
+        "format": "EXE",
+        "bytes": 19543264,
+        "sha256": "4ad29783d9d6c3a47fb48f4fcf19378203255e883c60c905cd7d03c5a76ad710",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-arm64.exe"
+      },
+      {
+        "id": "audacity-win-3.7.9-arm64.zip",
+        "filename": "audacity-win-3.7.9-arm64.zip",
+        "title": "Windows ARM64 便携版",
+        "platform": "windows",
+        "architecture": "arm64",
+        "format": "ZIP",
+        "bytes": 27513238,
+        "sha256": "c15771014710a03ca8d6a9e1a1cff4e20bba17fd0359471c091861189c66ba95",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-arm64.zip"
+      },
+      {
+        "id": "audacity-win-3.7.9-64bit.exe",
+        "filename": "audacity-win-3.7.9-64bit.exe",
+        "title": "Windows Intel / AMD x64 安装版",
+        "platform": "windows",
+        "architecture": "x64",
+        "format": "EXE",
+        "bytes": 19943880,
+        "sha256": "e3096847ac4270d304e9b112d153642a72b66b42e13f83a32f06eecfb4ce7e48",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-64bit.exe"
+      },
+      {
+        "id": "audacity-win-3.7.9-64bit.zip",
+        "filename": "audacity-win-3.7.9-64bit.zip",
+        "title": "Windows Intel / AMD x64 便携版",
+        "platform": "windows",
+        "architecture": "x64",
+        "format": "ZIP",
+        "bytes": 28591034,
+        "sha256": "6ace99628c02ae345690183950bf76ee7aeacdaa1a3693e98a6f971642cd2da7",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-64bit.zip"
+      },
+      {
+        "id": "audacity-win-3.7.9-32bit.exe",
+        "filename": "audacity-win-3.7.9-32bit.exe",
+        "title": "Windows 32 位 安装版",
+        "platform": "windows",
+        "architecture": "x86",
+        "format": "EXE",
+        "bytes": 18485456,
+        "sha256": "ed3c6881bfc002ea7d3099f61332865d146ac58521947c2db892fd9a0d5ec1c8",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-32bit.exe"
+      },
+      {
+        "id": "audacity-win-3.7.9-32bit.zip",
+        "filename": "audacity-win-3.7.9-32bit.zip",
+        "title": "Windows 32 位 便携版",
+        "platform": "windows",
+        "architecture": "x86",
+        "format": "ZIP",
+        "bytes": 26453755,
+        "sha256": "77fde2501e51c5e9b82bd2d5f4abca8320b91fa755acc8fdfe5f88b34e0b759d",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.9/audacity-win-3.7.9-32bit.zip"
+      }
+    ],
+    "mirrors": [
+      {
+        "id": "quark",
+        "name": "夸克网盘",
+        "enabled": true,
+        "url": "https://pan.quark.cn/s/ef621ddf6a5a",
+        "code": "",
+        "version": "3.7.9",
+        "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+        "scope": [
+          "windows:*",
+          "macos:*",
+          "linux:*"
+        ],
+        "affiliate": false
+      },
+      {
+        "id": "uc",
+        "name": "UC 网盘",
+        "enabled": true,
+        "url": "https://drive.uc.cn/s/e6b6ff1d1d3d4?public=1",
+        "code": "",
+        "version": "3.7.9",
+        "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+        "scope": [
+          "windows:*",
+          "macos:*",
+          "linux:*"
+        ],
+        "affiliate": false
+      },
+      {
+        "id": "xunlei",
+        "name": "迅雷网盘",
+        "enabled": true,
+        "url": "https://pan.xunlei.com/s/VP3KuLoWXoC-KIE_MpqgDGcNA1",
+        "code": "",
+        "version": "3.7.9",
+        "fileLabel": "Windows、macOS、Linux 原始文件及对应源码",
+        "scope": [
+          "windows:*",
+          "macos:*",
+          "linux:*"
+        ],
+        "affiliate": false,
+        "qrImage": "/netdisk-qr/xunlei-3.7.9.png",
+        "qrKind": "wechat-mini",
+        "linkEnabled": false
+      }
+    ]
+  }
 }

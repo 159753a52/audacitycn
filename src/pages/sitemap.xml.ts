@@ -5,6 +5,7 @@ export function GET() {
   const pages = [
     { path: '/', updated: '2026-10-07' },
     { path: '/download/', updated: downloads.verified },
+    ...['windows','macos','linux'].map(platform=>({path:`/download/${platform}/`,updated:downloads.verified})),
     { path: '/guides/', updated: '2026-10-07' },
     { path: '/faq/', updated: '2026-10-07' },
     { path: '/about/', updated: '2026-10-07' },

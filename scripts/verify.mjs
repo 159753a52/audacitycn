@@ -24,6 +24,7 @@ for(const file of htmls){
  assert.match(html,/<html lang="zh-CN"/); assert.match(html,/<meta name="description" content="[^"]{15,}"/);
  assert.ok(!/localhost|TODO|lorem ipsum|示例链接待替换/i.test(html),`${rel}: 存在临时内容`);
  assert.ok(!html.includes('/releases/download/'), `${rel}: 用户要求仅网盘入口，不能渲染安装包直链（包括结构化数据）`);
+ assert.ok(!/(?:href|src)="https?:[^"\s]+\.(?:msi|exe|dmg|appimage|7z|zip|tar\.gz|tar\.xz)(?:[?#]|\")/i.test(html), `${rel}: 不能显示外部安装包下载链接`);
  for(const [,href] of html.matchAll(/(?:href|src)="(\/[^"#?]*)(?:[?#][^"]*)?"/g)){
    if(href.startsWith('//'))continue;const p=join(dist,href);assert.ok(existsSync(p)||existsSync(join(p,'index.html')),`${rel}: 链接失效 ${href}`);
  }
