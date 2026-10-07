@@ -1,6 +1,15 @@
 import { guides } from '../data/guides';
 import { site } from '../data/site';
+import downloads from '../data/downloads.json';
 export function GET() {
-  const paths = ['/', '/download/', '/guides/', '/faq/', '/about/', '/privacy/', ...guides.map(g => `/guides/${g.slug}/`)];
-  return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(path => `<url><loc>${site.url}${path}</loc></url>`).join('')}</urlset>`, { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });
+  const pages = [
+    { path: '/', updated: '2026-10-07' },
+    { path: '/download/', updated: downloads.verified },
+    { path: '/guides/', updated: '2026-10-07' },
+    { path: '/faq/', updated: '2026-10-07' },
+    { path: '/about/', updated: '2026-10-07' },
+    { path: '/privacy/', updated: '' },
+    ...guides.map(g => ({ path: `/guides/${g.slug}/`, updated: g.updated })),
+  ];
+  return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(p => `<url><loc>${site.url}${p.path}</loc>${p.updated ? `<lastmod>${p.updated}</lastmod>` : ''}</url>`).join('')}</urlset>`, { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });
 }

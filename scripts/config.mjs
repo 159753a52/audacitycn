@@ -4,7 +4,7 @@ export function validateDownloads(config) {
     if (url.protocol !== 'https:' || url.hostname !== 'github.com' || !url.pathname.startsWith('/audacity/audacity/releases/download/')) throw Error('安装包必须来自 Audacity 官方发布仓库');
     if (!/^[a-f0-9]{64}$/.test(file.sha256)) throw Error('安装包缺少有效 SHA-256');
   }
-  const hosts = { quark: 'pan.quark.cn', baidu: 'pan.baidu.com' };
+  const hosts = { quark: 'pan.quark.cn', baidu: 'pan.baidu.com', uc: 'drive.uc.cn', xunlei: 'pan.xunlei.com' };
   for (const mirror of config.mirrors.filter(m => m.enabled)) {
     const url = new URL(mirror.url);
     if (url.protocol !== 'https:' || url.hostname !== hosts[mirror.id] || !url.pathname.startsWith('/s/')) throw Error('网盘须填写对应平台的 HTTPS 分享链接');
