@@ -184,10 +184,10 @@ export const guides: Guide[] = [
   },
   {
     "slug": "record-desktop",
-    "title": "Audacity 录电脑声音：Windows WASAPI 与 loopback 设置",
-    "short": "录电脑内部声音",
+    "title": "Audacity 录电脑声音（内录）：Windows WASAPI 与 loopback 设置",
+    "short": "录电脑内部声音（内录）",
     "category": "录音",
-    "intro": "Windows WASAPI 与 loopback 的完整设置顺序，附无声、录音报错和切换耳机排查。",
+    "intro": "Windows WASAPI 与回环（loopback）的内录设置顺序，附无声、录音报错和切换耳机排查。",
     "applies": "Windows 10 / 11 · Audacity 3.x / 4.x",
     "sections": [
       {
