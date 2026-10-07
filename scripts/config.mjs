@@ -19,7 +19,7 @@ export function validateDownloads(config) {
     }
     return config;
   }
-  
+
   export function availableMirrors(group, platform, architecture) {
     return group.mirrors.filter(m => m.enabled && (m.scope.includes(`${platform}:*`) || m.scope.includes(`${platform}:${architecture}`)));
   }
