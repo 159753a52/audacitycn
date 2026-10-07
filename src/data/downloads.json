@@ -46,11 +46,11 @@
     {
       "id": "baidu",
       "name": "百度网盘",
-      "enabled": false,
-      "url": "",
-      "code": "",
-      "version": "",
-      "fileLabel": "",
+      "enabled": true,
+      "url": "https://pan.baidu.com/s/10p33E62dTM-UG2JceL1V-A",
+      "code": "7mu2",
+      "version": "4.0.1",
+      "fileLabel": "Windows x64 安装版、便携版及对应源码",
       "affiliate": false
     },
     {

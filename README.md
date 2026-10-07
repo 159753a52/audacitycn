@@ -16,7 +16,7 @@ Cloudflare Pages：生产分支 `main`；构建命令 `npm run build`；输出�
 
 ## 网盘链接与二维码
 
-编辑 `src/data/downloads.json` 的 `mirrors`。普通镜像使用本站维护账号创建、已核对文件的分享链接。只有完成渠道绑定和推广审核后才能将相应入口标为计佣推广；不要将别人的分享链接视为自己的推广链接。目前启用夸克、UC 的原始文件镜像，`affiliate` 均为 false。
+编辑 `src/data/downloads.json` 的 `mirrors`。普通镜像使用本站维护账号创建、已核对文件的分享链接。只有完成渠道绑定和推广审核后才能将相应入口标为计佣推广；不要将别人的分享链接视为自己的推广链接。目前启用夸克、UC、百度的原始文件镜像，`affiliate` 均为 false。百度链接、提取码和六个文件清单由站点维护者确认。
 
 - `enabled`：开启后显示网盘按钮；关闭时不显示空白二维码或未完成的入口。
 - `url`：完整 HTTPS 分享链接；支持夸克 `pan.quark.cn/s/…`、百度 `pan.baidu.com/s/…`、UC `drive.uc.cn/s/…`、迅雷 `pan.xunlei.com/s/…`。平台与域名必须对应，提取码要核对。
