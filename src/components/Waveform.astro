@@ -48,5 +48,5 @@ const ticks = Array.from({ length: 12 }, (_, i) => left + i * 44);
     <line x1={playhead} y1="108" x2={playhead} y2="372" class="art-playhead" /><path d={`M${playhead - 6} 106h12l-6 8Z`} fill="#fff" />
   </svg>
   <div class="art-chip art-chip-top"><Icon name="tag" size={16} />{current} 当前版 · {legacy} 旧版</div>
-  <div class="art-chip art-chip-bottom"><Icon name="shield" size={16} />SHA-256 与官方校验记录一致</div>
+  <div class="art-chip art-chip-bottom"><Icon name="shield" size={16} />官方原始安装包 · 未重新打包</div>
 </div>

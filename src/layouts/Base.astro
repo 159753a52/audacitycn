@@ -3,18 +3,19 @@ import '../styles/global.css';
 import { site } from '../data/site';
 import BrandMark from '../components/BrandMark.astro';
 import Icon from '../components/Icon.astro';
-interface Props { title: string; description: string; noindex?: boolean; article?: boolean; updated?: string; breadcrumbs?: { name: string; path: string }[]; }
-const { title, description, noindex = false, article = false, updated, breadcrumbs = [] } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; article?: boolean; published?: string; updated?: string; breadcrumbs?: { name: string; path: string }[]; }
+const { title, description, noindex = false, article = false, published, updated, breadcrumbs = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const path = Astro.url.pathname;
 const nav = [['/guides/', '使用教程'], ['/faq/', '常见问题'], ['/about/', '关于本站']];
-const pageSchema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, dateModified: updated, author: { '@type': 'Organization', name: site.name, url: `${site.url}/about/` }, publisher: { '@type': 'Organization', name: site.name, url: site.url } } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN' };
+const organization = { '@type': 'Organization', '@id': `${site.url}/#organization`, name: site.name, url: site.url, logo: { '@type': 'ImageObject', url: `${site.url}/favicon.svg` }, sameAs: [site.repo] };
+const pageSchema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, datePublished: published, dateModified: updated, author: { '@type': 'Organization', name: site.name, url: `${site.url}/about/` }, publisher: organization } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN', publisher: organization };
 const schemas: Record<string, unknown>[] = [pageSchema];
-if (path === '/') schemas.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, alternateName: 'audacitycn.com', url: site.url, inLanguage: 'zh-CN' });
+if (path === '/') schemas.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, alternateName: 'audacitycn.com', url: site.url, inLanguage: 'zh-CN', publisher: organization }, { '@context': 'https://schema.org', ...organization, description: '独立中文资料站，整理 Audacity 下载、操作步骤与问题排查，内容按官方手册核对。' });
 if (breadcrumbs.length) schemas.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ name: '首页', path: '/' }, ...breadcrumbs].map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: new URL(item.path, site.url).href })) });
 const footerColumns = [
   ['下载', [['/download/windows/', 'Windows 版'], ['/download/macos/', 'Mac 版'], ['/download/linux/', 'Linux 版'], ['/download/', '下载中心']]],
-  ['教程', [['/guides/record-voice/', '麦克风录音'], ['/guides/record-desktop/', '录电脑声音'], ['/guides/noise-reduction/', '降噪'], ['/guides/export-audio/', '导出 MP3 / WAV'], ['/guides/', '全部教程']]],
+  ['教程', [['/guides/getting-started/', '新手入门'], ['/guides/chinese-language/', '设置中文界面'], ['/guides/record-desktop/', '录电脑声音'], ['/guides/noise-reduction/', '降噪'], ['/guides/export-audio/', '导出 MP3 / WAV'], ['/guides/', '全部教程']]],
   ['本站', [['/faq/', '常见问题'], ['/about/', '关于本站'], ['/privacy/', '隐私与推广说明']]],
 ] as const;
 ---
@@ -48,7 +49,7 @@ const footerColumns = [
         <div class="footer-grid">
           <div class="footer-brand">
             <a class="brand brand-light" href="/"><BrandMark id="brand-footer" /><span>Audacity 中文指南</span></a>
-            <p>独立中文资料站：整理 Audacity 下载、操作步骤和问题排查。教程标注适用版本，下载列出文件来源和 SHA-256。</p>
+            <p>独立中文资料站：整理 Audacity 下载、操作步骤和问题排查。每篇教程标注适用版本和核对日期，并列出所依据的官方资料。</p>
             <a class="footer-feedback" href={site.contact} target="_blank" rel="noopener noreferrer"><Icon name="help" size={16} />反馈与纠错<Icon name="external" size={14} /></a>
           </div>
           {footerColumns.map(([heading, links]) => <div class="footer-col"><h2>{heading}</h2>{links.map(([href, label]) => <a href={href}>{label}</a>)}</div>)}

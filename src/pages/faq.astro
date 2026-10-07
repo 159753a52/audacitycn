@@ -3,9 +3,10 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 const items = [
- ['下载与版本', 'Audacity 是免费软件吗？', 'Audacity 免费开源。中文界面包含在程序中，不需要购买激活码或另售的汉化包。网盘会员属于第三方服务，和软件使用权分开。', '/download/', '查看原始安装包'],
+ ['下载与版本', 'Audacity 是免费软件吗？', 'Audacity 免费开源，使用软件不需要购买激活码。中文界面包含在程序中，不需要另售的汉化包。', '/download/', '查看原始安装包'],
+ ['下载与版本', 'Audacity 怎么设置中文？', '中文界面是程序自带的。4.x 打开 Edit → Preferences，在 General 页的 Language 选简体中文；3.x 在 Preferences 的 Interface 页修改。macOS 从左上角的应用菜单打开偏好设置。', '/guides/chinese-language/', '设置中文界面的详细步骤'],
  ['下载与版本', 'x64、ARM64 和便携版怎么选？', '普通 Intel / AMD 电脑选 x64。Windows 11 ARM 电脑选 ARM64；当前 ARM64 版有插件限制。MSI 是安装版，7Z 完整解压后运行。先在 Windows 设置中查看系统类型。', '/guides/install/', '版本与安装步骤'],
- ['下载与版本', 'Mac 和 Linux 的下载在哪里？', '下载中心先选 macOS 或 Linux，再选 4.0.1 / 3.7.9、电脑架构和网盘。每次只显示一个分享码。Mac 区分 Apple Silicon、Intel 和通用版；Linux 的旧版只有 x64 AppImage。', '/download/', '按系统选择下载'],
+ ['下载与版本', 'Mac 和 Linux 的下载在哪里？', '下载中心先选 macOS 或 Linux，再选 4.0.1 / 3.7.9 和电脑架构。Mac 区分 Apple Silicon、Intel 和通用版；Linux 的旧版只有 x64 AppImage。', '/download/', '按系统选择下载'],
  ['录音与播放', '录音一直是一条直线，为什么？', '先在 Windows 输入设置里检查麦克风表头，再核对麦克风访问权限和 Audacity 的 Recording device。系统能收到、Audacity 收不到时，重新选择设备并执行 Rescan audio devices。', '/guides/no-sound/', '按现象排查录音无声'],
  ['录音与播放', '有波形但回放听不到怎么办？', '先检查 Playback device 是不是当前耳机，再看轨道 Mute / Solo 和系统音量。录音输入和回放输出是两条路径；有波形时不用先重录整段。', '/guides/no-sound/', '检查输出与回放'],
  ['录音与播放', '如何录电脑内部声音？', 'Windows 内录用 Windows WASAPI，录音设备选当前输出设备名称后的 (loopback)。先播放音频，再开始录制。切换耳机后重新选择回环，输入监听保持关闭。', '/guides/record-desktop/', 'Windows 内录设置'],
@@ -14,8 +15,9 @@ const items = [
  ['文件与编辑', 'M4A、WMA 导不进来怎么办？', '先确认普通播放器能打开且文件下载完整，再检查 FFmpeg 库。FFmpeg 与 Audacity 的架构必须匹配；把 .m4a 改成 .mp3 不会转换格式。', '/guides/ffmpeg/', 'FFmpeg 安装排查'],
  ['文件与编辑', '降噪后出现水声或金属感？', '先撤销，再检查噪声样本是否含讲话声，减轻处理强度。4.x 的 Noise only 可以试听准备删除的声音；其中有人声时，说明处理过强。', '/guides/noise-reduction/', '参数与样本检查'],
  ['文件与编辑', '为什么快捷键和旧教程不一样？', '4.x 的工具模式、分割、同步编辑和部分快捷键有变化。例如 S 是分割工具；3.x 常用的分割方式与它不同。先看文章适用版本。', '/guides/edit-audio/', '剪辑操作与版本差异'],
- ['本站与网盘', '哪个才是 Audacity 官网？', '软件项目官网是 audacityteam.org。audacitycn.com 是独立中文资料站，整理下载和操作说明，并在每篇教程中列出资料来源。', '/about/', '维护与来源说明'],
- ['本站与网盘', '网盘下载一定要登录或买会员吗？', '登录、转存、客户端和免费额度由网盘自己的页面决定。本站通过不同网盘提供原始文件的分享入口。若某个入口属于计佣推广，会在下载处标明；软件免费使用不以买网盘会员为条件。', '/privacy/', '下载跳转与推广说明'],
+ ['软件与本站', 'Audacity 有手机版吗？', 'Audacity 官方 FAQ 说明，目前没有 iOS 和 Android 版本，手机上以 Audacity 名义出现的应用都不是官方提供的。官方只发布 Windows、macOS 和 Linux 的电脑版。', '/download/', '查看电脑版下载'],
+ ['软件与本站', 'Audacity 这个名字是什么意思？', '英文单词 audacity 意为“大胆、无畏”，读音约为 /ɔːˈdæsəti/，重音在第二个音节。作为软件名，它指这款免费开源的录音与音频剪辑软件。', '/guides/getting-started/', '新手入门'],
+ ['软件与本站', '哪个才是 Audacity 官网？', '软件项目官网是 audacityteam.org。audacitycn.com 是独立中文资料站，整理下载和操作说明，并在每篇教程中列出资料来源。', '/about/', '维护与来源说明'],
 ];
 const groups = [...new Set(items.map(x=>x[0]))];
 ---

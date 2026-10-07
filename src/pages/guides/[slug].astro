@@ -5,17 +5,19 @@ import Icon from '../../components/Icon.astro';
 import { guides } from '../../data/guides';
 import type { Guide } from '../../data/guides';
 import { guideIcons, categoryTones } from '../../data/ui';
+import { site } from '../../data/site';
 export function getStaticPaths() { return guides.map(guide => ({ params: { slug: guide.slug }, props: { guide } })); }
 const { guide } = Astro.props as { guide: Guide };
 const related = guide.related.map(slug => guides.find(g=>g.slug===slug)).filter((g): g is Guide => Boolean(g));
 const tone = `tone-${categoryTones[guide.category] ?? 'blue'}`;
 ---
-<Base title={`${guide.title}｜Audacity 中文指南`} description={guide.intro} article updated={guide.updated} breadcrumbs={[{name:'使用教程',path:'/guides/'},{name:guide.short,path:`/guides/${guide.slug}/`}]}>
+<Base title={`${guide.title}｜Audacity 中文指南`} description={guide.intro} article published={site.launched} updated={guide.updated} breadcrumbs={[{name:'使用教程',path:'/guides/'},{name:guide.short,path:`/guides/${guide.slug}/`}]}>
   <div class={tone}>
     <PageHeader crumbs={[{ name: '使用教程', path: '/guides/' }, { name: guide.short }]} title={guide.title} lead={guide.intro} eyebrow={guide.category}>
       <div class="article-meta">
         <span class="chip"><Icon name="tag" size={15} />适用：{guide.applies}</span>
         <span class="chip"><Icon name="calendar" size={15} />内容核对：<time datetime={guide.updated}>{guide.updated}</time></span>
+        <a class="chip chip-link" href="#references"><Icon name="shield" size={15} />依据：{guide.sources.length} 份官方资料</a>
         <a class="chip chip-link" href="/about/"><Icon name="book" size={15} />维护：Audacity 中文指南</a>
       </div>
     </PageHeader>
@@ -31,11 +33,12 @@ const tone = `tone-${categoryTones[guide.category] ?? 'blue'}`;
         {s.table&&<div class="table-scroll" role="region" aria-label={s.title} tabindex="0"><table class="data-table"><thead><tr>{s.table.headers.map(h=><th scope="col">{h}</th>)}</tr></thead><tbody>{s.table.rows.map(row=><tr>{row.map(cell=><td>{cell}</td>)}</tr>)}</tbody></table></div>}
         {s.code&&<pre><code>{s.code}</code></pre>}
         {s.note&&<p class="note"><Icon name="info" size={18} /><span>{s.note}</span></p>}
+        {s.links&&<p class="see-also"><span>详细步骤：</span>{s.links.map(([label,href])=><a href={href}>{label}</a>)}</p>}
       </section>)}
       {guide.tip&&<p class="note"><Icon name="info" size={18} /><span>{guide.tip}</span></p>}
-      <section class="sources" id="references"><h2>资料来源</h2><p class="fine">本页按以下资料整理。界面有差异时，先核对软件版本和菜单英文名。</p><ul>{guide.sources.map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}<Icon name="external" size={14} /></a></li>)}</ul></section>
+      <section class="sources" id="references"><h2>资料来源</h2><p class="fine">本页按以下资料整理。界面有差异时，先核对软件版本和菜单英文名。</p><ul>{guide.sources.map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}<Icon name="external" size={14} /></a></li>)}</ul><p class="fine feedback-line">步骤和你看到的界面对不上？<a href={site.contact} target="_blank" rel="noopener noreferrer">提交反馈</a>，写明软件完整版本和系统，方便核对后更新。</p></section>
       <section class="related-list"><h2>相关问题</h2><div class="related-grid">{related.map(g=><a class:list={['related-card', `tone-${categoryTones[g.category] ?? 'blue'}`]} href={`/guides/${g.slug}/`}><span class="icon-tile"><Icon name={guideIcons[g.slug] ?? 'book'} size={20} /></span><span>{g.title}</span><Icon name="arrow" size={18} /></a>)}</div></section>
-      <div class="article-cta"><div><h2>还没安装 Audacity？</h2><p>按系统、版本和电脑类型选择，网盘扫码或打开分享获取原始文件。</p></div><div class="article-cta-actions"><a class="btn btn-primary" href="/download/"><Icon name="download" size={18} />下载与版本选择</a><a class="link-more" href="/guides/">所有教程<Icon name="arrow" size={16} /></a></div></div>
+      <div class="article-cta"><div><h2>还没安装 Audacity？</h2><p>按系统、版本和电脑类型选择官方原始安装包，文件名一一列出。</p></div><div class="article-cta-actions"><a class="btn btn-primary" href="/download/"><Icon name="download" size={18} />下载与版本选择</a><a class="link-more" href="/guides/">所有教程<Icon name="arrow" size={16} /></a></div></div>
     </article>
     <aside class="toc-wrap">
       <nav class="toc" aria-label="本页目录"><strong>本页内容</strong>{guide.sections.map((s,i)=><a href={`#step-${i+1}`}><span>{i+1}</span>{s.title}</a>)}<a href="#references"><span>·</span>资料来源</a></nav>
