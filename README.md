@@ -37,3 +37,5 @@ Cloudflare Pages：生产分支 `main`；构建命令 `npm run build`；输出�
 构建末尾检查唯一标题/描述、本页 canonical、h1、目录锚点、JSON-LD、站内链接、sitemap、下载域名及校验值。Google 所有权验证文件单独核对其精确内容，不当作文章加入 sitemap；不要移除 `public/google2d95f7b9770ef0ba.html`。`npm run indexnow` 在正式域名线上密钥可访问时提交，收录和排名由搜索引擎决定。
 
 反馈入口暂使用 `https://github.com/159753a52/audacitycn/issues`。网站不伪装官方，不编造使用量、评分或测试结论。
+
+Bing 站长工具所有权通过 `public/BingSiteAuth.xml` 验证；保留该文件以维持已授权的验证状态。
