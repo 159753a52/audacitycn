@@ -9,7 +9,7 @@
     { "id": "windows-arm64", "title": "Windows ARM64 安装版", "tag": "ARM 设备专用", "format": "MSI", "description": "适合 Windows 11 ARM 设备。官方说明此版本暂不支持插件，FFmpeg 也需匹配 ARM 版本。", "url": "https://github.com/audacity/audacity/releases/download/Audacity-4.0.1/audacity-win-4.0.1-arm64.msi", "sha256": "b6606d9bcb1a49254f1966c7edc68d78f7eadd04eebe7d4676350f32ca675f49" }
   ],
   "mirrors": [
-    { "id": "quark", "name": "夸克网盘", "enabled": false, "url": "", "code": "", "version": "", "fileLabel": "", "affiliate": false },
+    { "id": "quark", "name": "夸克网盘", "enabled": true, "url": "https://pan.quark.cn/s/3881781d92f4", "code": "", "version": "4.0.1", "fileLabel": "Windows x64 安装版、便携版及对应源码", "affiliate": false },
     { "id": "baidu", "name": "百度网盘", "enabled": false, "url": "", "code": "", "version": "", "fileLabel": "", "affiliate": false }
   ]
 }
