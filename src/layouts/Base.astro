@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+interface Props { title: string; description: string; noindex?: boolean; article?: boolean; }
+const { title, description, noindex = false, article = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const nav = [['/guides/', '使用教程'], ['/faq/', '常见问题'], ['/about/', '关于本站']];
+const schema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, author: { '@type': 'Organization', name: site.name, url: site.url } } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN' };
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" /><meta name="theme-color" content="#3158d5" />
+    <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content={article ? 'article' : 'website'} /><meta property="og:url" content={canonical} /><meta property="og:locale" content="zh_CN" /><meta property="og:site_name" content={site.name} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到正文</a>
+    <header class="site-header"><div class="container header-inner">
+      <a class="brand" href="/" aria-label="Audacity 中文指南首页"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>Audacity 中文指南<small>RECORD · EDIT · CREATE</small></span></a>
+      <nav class="nav" aria-label="主导航">{nav.map(([path, label]) => <a href={path} aria-current={Astro.url.pathname.startsWith(path) ? 'page' : undefined}>{label}</a>)}<a class="nav-download" href="/download/">下载 Audacity <span aria-hidden="true">↓</span></a></nav>
+    </div></header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer"><div class="container"><div class="footer-top"><div><a class="brand" href="/">Audacity 中文指南</a><p class="fine">从第一次录音，到一份能分享的声音。</p></div><div class="footer-links"><a href="/download/">下载中心</a><a href="/guides/">中文教程</a><a href="/privacy/">隐私与推广说明</a><a href={site.contact} target="_blank" rel="noopener noreferrer">反馈与纠错 ↗</a></div></div><div class="footer-bottom"><span>独立中文教程站，与 Audacity / Muse Group 无隶属关系。<br />Audacity 名称与相关商标归各自权利人所有。</span><span>© {new Date().getFullYear()} audacitycn.com<br /><a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">访问软件官网 ↗</a></span></div></div></footer>
+    <script>
+      document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(button => {
+        button.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(button.dataset.copy || ''); button.textContent = '已复制'; }
+          catch { button.textContent = '请手动选择上方文字复制'; }
+        });
+      });
+    </script>
+  </body>
+</html>

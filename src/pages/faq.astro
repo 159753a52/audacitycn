@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+const items = [
+ ['Audacity 是免费软件吗？', 'Audacity 是免费开源音频编辑软件。本站不出售激活码，也不要求购买会员才能使用软件。下载时请核对来源，网盘等第三方服务的会员属于另一项服务。'],
+ ['应该下载 x64 还是 ARM64？', '常见 Intel / AMD 64 位 Windows 电脑使用 x64。ARM 电脑需核对系统架构，选择适用版本。ARM64 版有插件支持限制，详情以官方当前下载页为准。'],
+ ['MSI 和便携版有什么区别？', 'MSI 通过安装程序部署；便携版需要完整解压后运行。无论哪种方式，都建议把正在编辑的工程放在本机磁盘，完成后再备份到其他设备。'],
+ ['录音没有声音，先检查什么？', '先确认系统能收到麦克风声音、麦克风权限已允许，再检查 Audacity 中的录音设备。电脑内录应选择正确播放设备对应的 WASAPI loopback。先用短录音验证，不要直接重录整段。'],
+ ['可以直接把工程文件发给别人听吗？', '工程文件主要用于继续编辑。给其他人播放时，通常应导出为 MP3、WAV 或其他兼容音频格式；需要协作编辑时，再按对方的软件版本和工作流分享工程。'],
+ ['为什么 M4A、WMA 导入失败？', '先确认文件能正常播放且下载完整。这些格式可能需要额外 FFmpeg 库，按官方安装说明选择与你的程序架构匹配的版本。只改文件扩展名不能转换格式。'],
+ ['降噪后出现水声或金属感怎么办？', '降噪过强、样本不合适或噪声与人声高度重叠，都可能损伤声音。撤销处理，重新选纯噪声样本，降低处理强度并试听。稳定底噪与突发杂音应分开判断。'],
+ ['为什么教程菜单和我的界面不一样？', 'Audacity 3.x 与 4.x 有界面及工作流变化。先看教程的适用版本，再核对菜单英文名。本站会将沿用旧版工作流的内容单独标明。'],
+ ['本站是 Audacity 官方网站吗？', '不是。audacitycn.com 是独立中文教程与下载指引网站。软件由 Audacity 项目开发，官方网站是 audacityteam.org；本站不代表开发者提供官方技术支持。'],
+ ['网盘下载是否一定需要会员？', '是否需要账号、客户端、转存及免费额度，由网盘当前政策决定。本站会标注推广入口。Audacity 本身免费，网盘会员不是使用 Audacity 的必要条件。']
+];
+---
+<Base title="Audacity 常见问题｜无声、导入失败、导出与版本选择" description="Audacity 中文常见问题：了解免费使用、x64 与 ARM64、便携版、录音无声、M4A 导入失败、工程与音频文件的区别，以及网盘下载说明。"><div class="container"><header class="page-heading"><div class="breadcrumb"><a href="/">首页</a> / 常见问题</div><span class="eyebrow">QUESTIONS & ANSWERS</span><h1>卡住了？先从这里排查。</h1><p class="lead">先确认软件版本和错误现象，再选择对应的处理方法。</p></header><div class="faq-list">{items.map(([q,a])=><details><summary>{q}</summary><p>{a}</p></details>)}</div><div class="section"><div class="callout"><div><h2>需要完整的操作步骤？</h2><p>录音、剪辑、导出与 FFmpeg，都有单独的指南。</p></div><a class="button" href="/guides/">浏览中文教程 →</a></div></div></div></Base>

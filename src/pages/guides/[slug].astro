@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import { guides } from '../../data/guides';
+export function getStaticPaths() { return guides.map(guide => ({ params: { slug: guide.slug }, props: { guide } })); }
+const { guide } = Astro.props;
+---
+<Base title={`${guide.title}｜Audacity 中文指南`} description={guide.intro + ' 本文列出操作顺序、注意事项和官方参考资料，帮助你完成当前任务。'} article>
+  <div class="container"><header class="page-heading"><div class="breadcrumb"><a href="/">首页</a> / <a href="/guides/">使用教程</a> / {guide.short}</div><span class="eyebrow">{guide.category} / GUIDE</span><h1>{guide.title}</h1><p class="lead">{guide.intro}</p><div class="article-meta"><span>适用：{guide.applies}</span><span>约 {guide.minutes} 分钟阅读</span></div></header><div class="article-grid"><nav class="toc" aria-label="本页目录"><strong>本页内容</strong>{guide.sections.map((s,i)=><a href={`#step-${i+1}`}>{i+1}. {s.title}</a>)}<a href="#references">参考资料</a></nav><article class="article">{guide.sections.map((s,i)=><section id={`step-${i+1}`}><h2>{i+1}. {s.title}</h2><p>{s.text}</p></section>)}<p class="note">{guide.tip}</p><div class="sources" id="references"><h2>参考资料</h2><p class="fine">本文根据以下公开资料整理。界面名称可能随版本和语言包变化；遇到差异时，请对照官方帮助。</p><ul>{guide.sources.map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label} ↗</a></li>)}</ul></div><div class="actions"><a class="button" href="/download/">前往下载中心</a><a class="button secondary" href="/guides/">继续阅读其他教程</a></div></article></div></div>
+</Base>
