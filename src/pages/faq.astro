@@ -1,19 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 const items = [
- ['下载与版站', 'Audacity 是免费软件吗？', 'Audacity 免费开源。中文界面包含在程序中，不需要购买激活码或另售的汉化包。网盘会员属于第三方服务，和软件使用权分开。', '/download/', '查看原始安装包'],
- ['下载与版站', 'x64、ARM64 和便携版怎么选？', '普通 Intel / AMD 电脑选 x64。Windows 11 ARM 电脑选 ARM64；当前 ARM64 版有插件限制。MSI 是安装版，7Z 完整解压后运行。先在 Windows 设置中查看系统类型。', '/guides/install/', '版站与安装步骤'],
+ ['下载与版本', 'Audacity 是免费软件吗？', 'Audacity 免费开源。中文界面包含在程序中，不需要购买激活码或另售的汉化包。网盘会员属于第三方服务，和软件使用权分开。', '/download/', '查看原始安装包'],
+ ['下载与版本', 'x64、ARM64 和便携版怎么选？', '普通 Intel / AMD 电脑选 x64。Windows 11 ARM 电脑选 ARM64；当前 ARM64 版有插件限制。MSI 是安装版，7Z 完整解压后运行。先在 Windows 设置中查看系统类型。', '/guides/install/', '版本与安装步骤'],
  ['录音与播放', '录音一直是一条直线，为什么？', '先在 Windows 输入设置里检查麦克风表头，再核对麦克风访问权限和 Audacity 的 Recording device。系统能收到、Audacity 收不到时，重新选择设备并执行 Rescan audio devices。', '/guides/no-sound/', '按现象排查录音无声'],
  ['录音与播放', '有波形但回放听不到怎么办？', '先检查 Playback device 是不是当前耳机，再看轨道 Mute / Solo 和系统音量。录音输入和回放输出是两条路径；有波形时不用先重录整段。', '/guides/no-sound/', '检查输出与回放'],
  ['录音与播放', '如何录电脑内部声音？', 'Windows 内录用 Windows WASAPI，录音设备选当前输出设备名称后的 (loopback)。先播放音频，再开始录制。切换耳机后重新选择回环，输入监听保持关闭。', '/guides/record-desktop/', 'Windows 内录设置'],
  ['文件与编辑', '为什么工程文件发给别人不能直接播放？', 'Audacity 4 的 .aup4、Audacity 3 的 .aup3 都是工程。给别人听时用 File → Export audio 导出 MP3、WAV 或其他支持的音频格式。保留工程便于自己以后修改。', '/guides/export-audio/', '工程、格式与码率对照'],
  ['文件与编辑', '导出的音频只有一小段，或少了一条轨道？', '检查 Type 是否误选了选区或 loop region，再检查轨道静音与独奏状态。导出后核对时长、头尾和左右声道。', '/guides/export-audio/', '完整工程与选区导出'],
  ['文件与编辑', 'M4A、WMA 导不进来怎么办？', '先确认普通播放器能打开且文件下载完整，再检查 FFmpeg 库。FFmpeg 与 Audacity 的架构必须匹配；把 .m4a 改成 .mp3 不会转换格式。', '/guides/ffmpeg/', 'FFmpeg 安装排查'],
- ['文件与编辑', '降噪后出现水声或金属感？', '先撤销，再检查噪声样站是否含讲话声，减轻处理强度。4.x 的 Noise only 可以试听准备删除的声音；其中有人声时，说明处理过强。', '/guides/noise-reduction/', '参数与样站检查'],
- ['文件与编辑', '为什么快捷键和旧教程不一样？', '4.x 的工具模式、分割、同步编辑和部分快捷键有变化。例如 S 是分割工具；3.x 常用的分割方式与它不同。先看文章适用版站。', '/guides/edit-audio/', '剪辑操作与版站差异'],
- ['站站与网盘', '哪个才是 Audacity 官网？', '软件项目官网是 audacityteam.org。audacitycn.com 是独立中文资料站，整理下载和操作说明，并在每篇教程中列出资料来源。', '/about/', '维护与来源说明'],
- ['站站与网盘', '网盘下载一定要登录或买会员吗？', '登录、转存、客户端和免费额度由网盘自己的页面决定。站站同时提供原始文件的官网直链。若某个入口属于计佣推广，会在下载处标明；软件免费使用不以买网盘会员为条件。', '/privacy/', '下载跳转与推广说明'],
+ ['文件与编辑', '降噪后出现水声或金属感？', '先撤销，再检查噪声样本是否含讲话声，减轻处理强度。4.x 的 Noise only 可以试听准备删除的声音；其中有人声时，说明处理过强。', '/guides/noise-reduction/', '参数与样本检查'],
+ ['文件与编辑', '为什么快捷键和旧教程不一样？', '4.x 的工具模式、分割、同步编辑和部分快捷键有变化。例如 S 是分割工具；3.x 常用的分割方式与它不同。先看文章适用版本。', '/guides/edit-audio/', '剪辑操作与版本差异'],
+ ['本站与网盘', '哪个才是 Audacity 官网？', '软件项目官网是 audacityteam.org。audacitycn.com 是独立中文资料站，整理下载和操作说明，并在每篇教程中列出资料来源。', '/about/', '维护与来源说明'],
+ ['本站与网盘', '网盘下载一定要登录或买会员吗？', '登录、转存、客户端和免费额度由网盘自己的页面决定。本站通过不同网盘提供原始文件的分享入口。若某个入口属于计佣推广，会在下载处标明；软件免费使用不以买网盘会员为条件。', '/privacy/', '下载跳转与推广说明'],
 ];
 const groups = [...new Set(items.map(x=>x[0]))];
 ---
-<Base title="Audacity 常见问题：录音无声、导出失败与版站选择" description="按现象排查 Audacity：录音直线、有波形没声音、WASAPI 内录、工程文件不能播放、MP3 只导出一段、M4A 导入失败与降噪水声。" breadcrumbs={[{name:'常见问题',path:'/faq/'}]}><div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 常见问题</nav><h1>Audacity 常见问题</h1><p class="lead">先确定是输入、回放、文件还是版站问题。每个回答后面都有详细操作页。</p></header><div class="faq-list">{groups.map(group=><section><h2 class="faq-topic">{group}</h2>{items.filter(x=>x[0]===group).map(([,q,a,url,label])=><details><summary>{q}</summary><p>{a}</p><a href={url}>{label} →</a></details>)}</section>)}</div></div></Base>
+<Base title="Audacity 常见问题：录音无声、导出失败与版本选择" description="按现象排查 Audacity：录音直线、有波形没声音、WASAPI 内录、工程文件不能播放、MP3 只导出一段、M4A 导入失败与降噪水声。" breadcrumbs={[{name:'常见问题',path:'/faq/'}]}><div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 常见问题</nav><h1>Audacity 常见问题</h1><p class="lead">先确定是输入、回放、文件还是版本问题。每个回答后面都有详细操作页。</p></header><div class="faq-list">{groups.map(group=><section><h2 class="faq-topic">{group}</h2>{items.filter(x=>x[0]===group).map(([,q,a,url,label])=><details><summary>{q}</summary><p>{a}</p><a href={url}>{label} →</a></details>)}</section>)}</div></div></Base>
