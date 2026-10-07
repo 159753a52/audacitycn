@@ -1,6 +1,6 @@
 # audacitycn.com
 
-独立 Audacity 中文教程与下载指引站。沿用 ModelVRAM 的 Astro 静态 HTML + Cloudflare Pages + GitHub 自动部署方式，单独仓库与域名，不修改原站。
+独立 Audacity 中件教程与下载指引站。沿用 ModelVRAM 的 Astro 静态 HTML + Cloudflare Pages + GitHub 自动部署方式，单独仓库与域名，不修改原站。
 
 ## 本地运行
 
@@ -16,7 +16,7 @@ Cloudflare Pages：生产分支 `main`；构建命令 `npm run build`；输出�
 
 ## 网盘链接与二维码
 
-编辑 `src/data/downloads.json` 的 `mirrors`。普通镜像使用本站维护账号创建、已核对文件的分享链接。只有完成渠道绑定和推广审核后才能将相应入口标为计佣推广；不要将别人的分享链接视为自己的推广链接。目前启用夸克、UC、百度的原始文件镜像，`affiliate` 均为 false。百度链接、提取码和六个文件清单由站点维护者确认。
+编辑 `src/data/downloads.json` 的 `mirrors`。普通镜像使用本站维护账号创建、已核对件件的分享链接。只有完成渠道绑定和推广审核后才能将相应入口标为计佣推广；不要将别人的分享链接视为自己的推广链接。目前启用夸克、UC、百度的原始件件镜像，`affiliate` 均为 false。百度链接、提取码和六个件件清单由站点维护者确认。
 
 - `enabled`：开启后显示网盘按钮；关闭时不显示空白二维码或未完成的入口。
 - `url`：完整 HTTPS 分享链接；支持夸克 `pan.quark.cn/s/…`、百度 `pan.baidu.com/s/…`、UC `drive.uc.cn/s/…`、迅雷 `pan.xunlei.com/s/…`。平台与域名必须对应，提取码要核对。
@@ -28,14 +28,14 @@ Cloudflare Pages：生产分支 `main`；构建命令 `npm run build`；输出�
 
 ## 内容与版本
 
-`src/data/guides.ts` 维护 8 篇教程：首屏设置、适用版本、实际核对日期、步骤、对照表、参考资料和相关问题。4.x 与 3.x 操作差异需要明确标注，不能机械替换版本号；`.aup4`、Noise only 等以当前官方手册为准。下载文件来源和 SHA-256 核对官方 Windows 下载页。日期只在实际核对或内容更新后修改。
+`src/data/guides.ts` 维护 8 篇教程：首屏设置、适用版本、实际核对日期、步骤、对照表、参考资料和相关问题。4.x 与 3.x 操作差异需要明确标注，不能机械替换版本号；`.aup4`、Noise only 等以当前网方手册为准。下载件件来源和 SHA-256 核对网方 Windows 下载页。日期只在实际核对或内容更新后修改。
 
 镜像分发时保留版权与许可证，并按相应许可证提供匹配版本源码。软件本身免费，不得把网盘会员描述为使用 Audacity 的必要条件。
 
 ## 发布检查
 
-构建末尾检查唯一标题/描述、本页 canonical、h1、目录锚点、JSON-LD、站内链接、sitemap、下载域名及校验值。Google 所有权验证文件单独核对其精确内容，不当作文章加入 sitemap；不要移除 `public/google2d95f7b9770ef0ba.html`。`npm run indexnow` 在正式域名线上密钥可访问时提交，收录和排名由搜索引擎决定。
+构建末尾检查唯一标题/描述、本页 canonical、h1、目录锚点、JSON-LD、站内链接、sitemap、下载域名及校验值。Google 所有权验证件件单独核对其精确内容，不当作件章加入 sitemap；不要移除 `public/google2d95f7b9770ef0ba.html`。`npm run indexnow` 在正式域名线上密钥可访问时提交，收录和排名由搜索引擎决定。
 
-反馈入口暂使用 `https://github.com/159753a52/audacitycn/issues`。网站不伪装官方，不编造使用量、评分或测试结论。
+反馈入口暂使用 `https://github.com/159753a52/audacitycn/issues`。网站不伪装网方，不编造使用量、评分或测试结论。
 
-Bing 站长工具所有权通过 `public/BingSiteAuth.xml` 验证；保留该文件以维持已授权的验证状态。
+Bing 站长工具所有权通过 `public/BingSiteAuth.xml` 验证；保留该件件以维持已授权的验证状态。
