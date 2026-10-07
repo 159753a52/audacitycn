@@ -1,12 +1,84 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
 import downloads from '../data/downloads.json';
 import { platforms } from '../data/platforms';
+import { archChoices, platformIcons, providerBadges } from '../data/ui';
+const groups = [downloads, downloads.legacy];
+const archTags = (id: string) => archChoices[id].filter(a => groups.some(g => g.files.some(f => f.platform === id && f.architecture === a.id))).map(a => a.short);
+const providerIds = [...new Set(groups.flatMap(g => g.mirrors.filter(m => m.enabled).map(m => m.id)))];
+const coverage = providerIds.map(id => ({
+  id,
+  name: groups.flatMap(g => g.mirrors).find(m => m.id === id)!.name,
+  cells: groups.map(g => {
+    const mirror = g.mirrors.find(m => m.id === id && m.enabled);
+    if (!mirror) return null;
+    const full = platforms.every(p => mirror.scope.includes(`${p.id}:*`));
+    return full ? '全部系统' : `仅 ${mirror.scope.map(s => { const [p, a] = s.split(':'); return `${platforms.find(x => x.id === p)!.name} ${a === '*' ? '' : archChoices[p].find(c => c.id === a)?.short ?? a}`.trim(); }).join('、')}`;
+  }),
+}));
 ---
 <Base title="Audacity 中文下载：Windows、Mac、Linux 网盘与版本选择" description="按系统选择 Audacity 原始文件下载：Windows、macOS、Linux。整理当前 4.0.1 与 3.x 旧版 3.7.9，分架构列出文件名、SHA-256、网盘分享与二维码。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
-  <div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 下载</nav><h1>Audacity 下载中心</h1><p class="lead">先选电脑系统，再选版本和网盘。每次只显示你选中的分享二维码；文件名和校验值放在同一页。</p></header>
-    <div class="download-summary"><strong>{downloads.version}</strong><span>当前版</span><span>3.x 旧版：{downloads.legacy.version}</span><span>来源核对：<time datetime={downloads.verified}>{downloads.verified}</time></span></div>
-    <section class="platform-list" aria-labelledby="choose-system"><h2 id="choose-system">你使用哪个系统？</h2>{platforms.map(p=><a class="platform-row" href={`/download/${p.id}/`}><div><h3>{p.name}</h3><p>{p.summary}</p></div><span>选择版本与网盘 <span aria-hidden="true">→</span></span></a>)}</section>
-    <section class="download-info"><h2>4.x 和 3.x 怎么选？</h2><p>初次使用可从 4.0.1 开始。需要 32 位 Windows 程序，或继续使用 3.x 的工程与插件工作流，可选择 3.7.9。4.x 保存 .aup4 工程，3.x 保存 .aup3；升级前保留原工程副本，不要直接覆盖唯一备份。</p><h2>网盘里面有哪些文件？</h2><p>夸克、UC、迅雷按版本提供 Windows、Mac 和 Linux 的原始发布包，并保留对应源码、许可证、CHECKSUMS.txt 与来源说明。3.7.9 另有离线手册。百度目前只提供 4.0.1 Windows x64。</p><p>本站是独立中文资料站，与软件项目无隶属关系。Audacity 免费开源；网盘的登录、转存、速度和会员由相应平台决定。</p><h2>下载后先看这些</h2><ul><li><a href="/guides/install/">Windows 安装与中文界面设置</a></li><li><a href="/guides/record-voice/">录一段声音，检查设备与电平</a></li><li><a href="/guides/export-audio/">工程保存与 MP3 / WAV 导出</a></li></ul></section>
-  </div>
+  <PageHeader crumbs={[{ name: '下载' }]} title="Audacity 下载中心" lead="先选电脑系统，再选版本和网盘。每次只显示你选中的分享二维码；文件名和校验值放在同一页。">
+    <ul class="release-strip">
+      <li><span>当前版</span><strong>{downloads.version}</strong></li>
+      <li><span>3.x 旧版</span><strong>{downloads.legacy.version}</strong></li>
+      <li><span>来源核对</span><strong><time datetime={downloads.verified}>{downloads.verified}</time></strong></li>
+    </ul>
+  </PageHeader>
+  <section class="section-sm" aria-labelledby="choose-system">
+    <div class="container">
+      <h2 class="block-title" id="choose-system">你使用哪个系统？</h2>
+      <p class="mobile-note" data-mobile-note hidden><Icon name="phone" size={18} /><span>你正在用手机浏览。Audacity 是电脑软件：可以先打开网盘分享转存，回到电脑上再下载安装。</span></p>
+      <div class="os-grid">
+        {platforms.map(p => <a class="os-card" href={`/download/${p.id}/`} data-os={p.id}>
+          <span class="os-top"><span class="os-icon"><Icon name={platformIcons[p.id]} size={28} /></span><span class="chip chip-primary os-detected" hidden>你的系统</span></span>
+          <h3>{p.name}</h3>
+          <p>{p.summary}</p>
+          <ul class="os-tags">{archTags(p.id).map(tag => <li>{tag}</li>)}</ul>
+          <span class="os-go">选择版本与网盘<Icon name="arrow" size={18} /></span>
+        </a>)}
+      </div>
+    </div>
+  </section>
+  <section class="section-sm section-white" aria-labelledby="pan-coverage">
+    <div class="container info-grid">
+      <div class="info-main">
+        <h2 class="block-title" id="pan-coverage">网盘里面有哪些文件？</h2>
+        <p class="info-text">夸克、UC、迅雷按版本提供 Windows、Mac 和 Linux 的原始发布包，并保留对应源码、许可证、CHECKSUMS.txt 与来源说明。3.7.9 另有离线手册。百度目前只提供 4.0.1 Windows x64。</p>
+        <div class="table-wrap">
+          <table class="cover-table">
+            <thead><tr><th scope="col">网盘</th>{groups.map((g, i) => <th scope="col">{g.version}<small>{i === 0 ? '当前版' : '3.x 旧版'}</small></th>)}</tr></thead>
+            <tbody>{coverage.map(row => <tr><th scope="row"><span class="pan-name"><span class="pan-badge" style={`--pan:${providerBadges[row.id]?.color ?? '#2b59ff'}`} aria-hidden="true">{providerBadges[row.id]?.short ?? row.name.slice(0, 1)}</span>{row.name}</span></th>{row.cells.map(cell => <td>{cell ? <span class:list={['cover-cell', { 'is-partial': cell.startsWith('仅') }]}><Icon name="check" size={16} />{cell}</span> : <span class="cover-none">无</span>}</td>)}</tr>)}</tbody>
+          </table>
+        </div>
+        <p class="fine">本站是独立中文资料站，与软件项目无隶属关系。Audacity 免费开源；网盘的登录、转存、速度和会员由相应平台决定。</p>
+      </div>
+      <aside class="info-side">
+        <article class="side-card">
+          <h2>4.x 和 3.x 怎么选？</h2>
+          <p>初次使用可从 4.0.1 开始。需要 32 位 Windows 程序，或继续使用 3.x 的工程与插件工作流，可选择 3.7.9。4.x 保存 .aup4 工程，3.x 保存 .aup3；升级前保留原工程副本，不要直接覆盖唯一备份。</p>
+        </article>
+        <article class="side-card">
+          <h2>下载后先看这些</h2>
+          <ul class="side-links">
+            <li><a href="/guides/install/"><Icon name="download" size={18} />Windows 安装与中文界面设置</a></li>
+            <li><a href="/guides/record-voice/"><Icon name="mic" size={18} />录一段声音，检查设备与电平</a></li>
+            <li><a href="/guides/export-audio/"><Icon name="export" size={18} />工程保存与 MP3 / WAV 导出</a></li>
+          </ul>
+        </article>
+      </aside>
+    </div>
+  </section>
 </Base>
+<script>
+  const ua = navigator.userAgent;
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string; mobile?: boolean } };
+  const platform = (nav.userAgentData?.platform || navigator.platform || '').toLowerCase();
+  const mobile = nav.userAgentData?.mobile || /android|iphone|ipad|ipod/i.test(ua) || (/mac/.test(platform) && navigator.maxTouchPoints > 1);
+  const os = mobile ? '' : /win/.test(platform) || /windows/i.test(ua) ? 'windows' : /mac/.test(platform) || /mac os/i.test(ua) ? 'macos' : /linux|x11/.test(platform) || /linux/i.test(ua) ? 'linux' : '';
+  if (mobile) document.querySelector<HTMLElement>('[data-mobile-note]')?.removeAttribute('hidden');
+  const card = os ? document.querySelector<HTMLElement>(`[data-os="${os}"]`) : null;
+  if (card) { card.classList.add('is-detected'); card.querySelector<HTMLElement>('.os-detected')?.removeAttribute('hidden'); }
+</script>

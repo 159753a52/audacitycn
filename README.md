@@ -42,4 +42,6 @@ Bing 站长工具所有权通过 `public/BingSiteAuth.xml` 验证；保留该文
 
 下载入口仅使用网盘分享链接和二维码；构建时禁止在页面或 JSON-LD 中渲染安装包直链。原始文件 URL 只用于构建期核对来源、文件名与校验值。
 
-下载分类：`/download/` 是系统入口；`/download/windows/`、`/download/macos/`、`/download/linux/` 使用原生下拉框切换版本、架构和网盘，每次仅一个二维码。安装包来源 URL 仅供构建时核对，不进入 HTML / JSON-LD。
+下载分类：`/download/` 是系统入口；`/download/windows/`、`/download/macos/`、`/download/linux/` 用单选卡片依次选择版本、电脑架构和网盘。不适用的选项保留显示并标注原因（如“仅 3.7.9”“仅 4.0.1 · x64”），切换后自动回到可用选项；每次仅显示一个二维码。安装包来源 URL 仅供构建时核对，不进入 HTML / JSON-LD。
+
+页面样式：`src/styles/` 下分为 base（变量、页头页脚、按钮）、home、download、content 四个文件，由 global.css 引入。图标在 `src/components/Icon.astro`；教程卡片的图标与配色、各系统的架构选项文字在 `src/data/ui.ts`。首页插图是代码绘制的通用音频编辑窗口，不是 Audacity 截图。

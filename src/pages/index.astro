@@ -1,6 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Waveform from '../components/Waveform.astro';
 import { guides } from '../data/guides';
+import { platforms } from '../data/platforms';
+import { guideIcons, categoryTones, platformIcons, platformShort, archChoices } from '../data/ui';
 import downloads from '../data/downloads.json';
 const questions = [
   ['录音是一条直线', '/guides/no-sound/', '先检查输入设备和系统权限'],
@@ -8,13 +12,95 @@ const questions = [
   ['工程文件发给别人打不开', '/guides/export-audio/', '先导出 MP3 或 WAV'],
   ['M4A 文件导不进来', '/guides/ffmpeg/', '检查文件与 FFmpeg 架构'],
 ];
+const coverage = (group: typeof downloads | typeof downloads.legacy) => platforms.map(p => ({
+  id: p.id, name: p.name,
+  archs: archChoices[p.id].filter(a => group.files.some(f => f.platform === p.id && f.architecture === a.id)).map(a => a.short),
+}));
+const versions = [
+  { group: downloads, label: '当前版', project: '.aup4', note: '初次使用从这里开始。官方当前测试 Windows 10 / 11、macOS 14 / 15、Ubuntu 22.04。', pans: '夸克 · UC · 迅雷 · 百度（仅 Windows x64）' },
+  { group: downloads.legacy, label: '3.x 旧版', project: '.aup3', note: '需要 32 位 Windows 程序，或继续使用 3.x 工程与插件时选择。', pans: '夸克 · UC · 迅雷' },
+];
 ---
 <Base title="Audacity 中文下载与教程：录音、剪辑、降噪和 MP3 导出" description="Audacity 独立中文指南。提供 Windows、Mac、Linux 的 4.0.1 / 3.7.9 网盘下载与 SHA-256 校验，以及麦克风录音、WASAPI 电脑内录、降噪和 MP3 导出步骤。">
-  <section class="home-intro"><div class="container intro-grid">
-    <div><span class="site-label">audacitycn.com / 中文资料</span><h1>Audacity 中文下载<br />与使用教程</h1><p class="lead">Audacity 是免费的录音与音频剪辑软件。这里整理 Windows、Mac、Linux 的原始安装包、常用设置和问题排查。教程会标注 3.x / 4.x 的区别。</p><div class="topic-links"><a href="/guides/record-voice/">麦克风录音</a><a href="/guides/record-desktop/">电脑内录</a><a href="/guides/noise-reduction/">降噪</a><a href="/guides/export-audio/">导出 MP3</a></div></div>
-    <aside class="release-box" aria-label="当前整理版本"><span class="fine">按系统下载</span><h2>Audacity {downloads.version}</h2><dl><dt>版本类型</dt><dd>Windows / macOS / Linux</dd><dt>文件来源</dt><dd>Audacity 官方发布仓库</dd><dt>来源核对</dt><dd>{downloads.verified}</dd></dl><a class="button" href="/download/">选择系统与版本</a><p class="fine">选择网盘扫码或打开分享链接，下载原始文件。</p></aside>
-  </div></section>
-  <div class="container home-body"><section><div class="section-head"><h2>按问题找教程</h2><a href="/guides/">查看全部 {guides.length} 篇 →</a></div><div class="guide-rows">{guides.map(g=><a class="guide-row" href={`/guides/${g.slug}/`}><span class="row-category">{g.category}</span><div><h3>{g.short}</h3><p>{g.intro}</p><div class="row-meta">{g.applies}</div></div><span class="row-arrow" aria-hidden="true">→</span></a>)}</div></section>
-    <aside><section class="sidebar-block"><h2>遇到这些情况</h2><ul class="quick-list">{questions.map(([q,url,note])=><li><a href={url}>{q} →</a><span>{note}</span></li>)}</ul></section><section class="sidebar-block"><h2>下载前看一下</h2><p>Intel / AMD 电脑通常选 x64。ARM 电脑先查看 Windows“系统类型”。中文界面包含在程序中，无需找另售的汉化包。</p><a href="/guides/install/">安装版与便携版区别 →</a></section><section class="sidebar-block"><h2>工程与音频</h2><p>4.x 保存 .aup4 工程，3.x 保存 .aup3。给别人播放时，导出 MP3、WAV 等音频文件。</p><a href="/guides/export-audio/">格式与文件大小对照 →</a></section><section class="sidebar-block"><h2>资料从哪里来</h2><p>操作说明参考对应版本的官方手册。本站是独立中文资料站，菜单位置变化和未覆盖的设备问题可通过反馈入口提交。</p><a href="/about/">维护与来源说明 →</a></section></aside>
-  </div>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span class="pulse" aria-hidden="true"></span>独立中文资料站 · 整理 {downloads.version} 与 {downloads.legacy.version}</p>
+        <h1>Audacity 中文下载<br />与使用教程</h1>
+        <p class="hero-lead">免费开源的录音与音频剪辑软件。按系统选好版本，用网盘扫码或打开分享获取原始安装包；录音、电脑内录、降噪和导出都有中文步骤，并标注 3.x / 4.x 的区别。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="/download/"><Icon name="download" />下载 Audacity {downloads.version}</a>
+          <a class="btn btn-glass btn-lg" href="/guides/"><Icon name="book" />看中文教程</a>
+        </div>
+        <ul class="hero-os" aria-label="按系统下载">
+          {platforms.map(p => <li><a href={`/download/${p.id}/`}><Icon name={platformIcons[p.id]} size={22} /><span><strong>{p.name}</strong><small>{platformShort[p.id]}</small></span></a></li>)}
+        </ul>
+      </div>
+      <Waveform current={downloads.version} legacy={downloads.legacy.version} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="guides-heading">
+    <div class="container">
+      <div class="section-head">
+        <div><h2 id="guides-heading">按问题找教程</h2><p>每篇先给设置结论，再列步骤、对照表和资料来源。</p></div>
+        <a class="link-more" href="/guides/">全部 {guides.length} 篇教程<Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="guide-grid">
+        {guides.map(g => <a class:list={['guide-card', `tone-${categoryTones[g.category] ?? 'blue'}`]} href={`/guides/${g.slug}/`}>
+          <span class="guide-card-top"><span class="icon-tile"><Icon name={guideIcons[g.slug] ?? 'book'} size={22} /></span><span class="guide-cat">{g.category}</span></span>
+          <h3>{g.short}</h3>
+          <p>{g.intro}</p>
+          <span class="guide-applies">{g.applies}</span>
+        </a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white" aria-labelledby="quick-heading">
+    <div class="container quick-grid">
+      <div>
+        <h2 id="quick-heading" class="quick-title">遇到这些情况</h2>
+        <p class="quick-sub">从现象直接跳到排查步骤。</p>
+        <ul class="quick-list">
+          {questions.map(([q, url, note]) => <li><a href={url}><span><strong>{q}</strong><small>{note}</small></span><Icon name="arrow" size={18} /></a></li>)}
+        </ul>
+      </div>
+      <div class="tip-stack">
+        <div class="tip-card"><span class="icon-tile"><Icon name="cpu" size={22} /></span><div><h3>下载前看一下</h3><p>Intel / AMD 电脑通常选 x64。ARM 电脑先查看 Windows“系统类型”。中文界面包含在程序中，无需找另售的汉化包。</p><a class="link-more" href="/guides/install/">安装版与便携版区别<Icon name="arrow" size={16} /></a></div></div>
+        <div class="tip-card"><span class="icon-tile"><Icon name="file" size={22} /></span><div><h3>工程与音频</h3><p>4.x 保存 .aup4 工程，3.x 保存 .aup3。给别人播放时，导出 MP3、WAV 等音频文件。</p><a class="link-more" href="/guides/export-audio/">格式与文件大小对照<Icon name="arrow" size={16} /></a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="versions-heading">
+    <div class="container">
+      <div class="section-head">
+        <div><h2 id="versions-heading">两个版本，按需选择</h2><p>文件取自 Audacity 官方发布记录，保留原始文件名，不重新打包。</p></div>
+        <a class="link-more" href="/download/">进入下载中心<Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="version-grid">
+        {versions.map(({ group, label, project, note, pans }, index) => <article class:list={['version-card', { 'is-current': index === 0 }]}>
+          <header><span class:list={['chip', { 'chip-primary': index === 0 }]}>{label}</span><h3>Audacity {group.version}</h3><p>{note}</p></header>
+          <dl class="version-specs">
+            {coverage(group).map(row => <div><dt><Icon name={platformIcons[row.id]} size={18} />{row.name}</dt><dd>{row.archs.join(' · ')}</dd></div>)}
+            <div><dt><Icon name="file" size={18} />工程格式</dt><dd>{project}</dd></div>
+            <div><dt><Icon name="cloud" size={18} />网盘</dt><dd>{pans}</dd></div>
+          </dl>
+        </article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm trust" aria-labelledby="trust-heading">
+    <div class="container">
+      <h2 id="trust-heading" class="sr-only">资料从哪里来</h2>
+      <div class="trust-grid">
+        <div><Icon name="shield" size={22} /><p><strong>原始文件</strong>安装包来自 Audacity 官方发布记录，下载页列出文件名与 SHA-256。</p></div>
+        <div><Icon name="calendar" size={22} /><p><strong>标注版本</strong>教程注明适用版本与核对日期，3.x / 4.x 的菜单差异单独说明。</p></div>
+        <div><Icon name="book" size={22} /><p><strong>列出来源</strong>操作说明参考对应版本的官方手册。本站与软件项目无隶属关系。</p></div>
+      </div>
+      <p class="trust-more"><a class="link-more" href="/about/">维护与来源说明<Icon name="arrow" size={16} /></a></p>
+    </div>
+  </section>
 </Base>

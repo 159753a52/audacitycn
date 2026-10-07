@@ -1,14 +1,22 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import BrandMark from '../components/BrandMark.astro';
+import Icon from '../components/Icon.astro';
 interface Props { title: string; description: string; noindex?: boolean; article?: boolean; updated?: string; breadcrumbs?: { name: string; path: string }[]; }
 const { title, description, noindex = false, article = false, updated, breadcrumbs = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+const path = Astro.url.pathname;
 const nav = [['/guides/', '使用教程'], ['/faq/', '常见问题'], ['/about/', '关于本站']];
 const pageSchema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, dateModified: updated, author: { '@type': 'Organization', name: site.name, url: `${site.url}/about/` }, publisher: { '@type': 'Organization', name: site.name, url: site.url } } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN' };
 const schemas: Record<string, unknown>[] = [pageSchema];
-if (Astro.url.pathname === '/') schemas.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, alternateName: 'audacitycn.com', url: site.url, inLanguage: 'zh-CN' });
+if (path === '/') schemas.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, alternateName: 'audacitycn.com', url: site.url, inLanguage: 'zh-CN' });
 if (breadcrumbs.length) schemas.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ name: '首页', path: '/' }, ...breadcrumbs].map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: new URL(item.path, site.url).href })) });
+const footerColumns = [
+  ['下载', [['/download/windows/', 'Windows 版'], ['/download/macos/', 'Mac 版'], ['/download/linux/', 'Linux 版'], ['/download/', '下载中心']]],
+  ['教程', [['/guides/record-voice/', '麦克风录音'], ['/guides/record-desktop/', '录电脑声音'], ['/guides/noise-reduction/', '降噪'], ['/guides/export-audio/', '导出 MP3 / WAV'], ['/guides/', '全部教程']]],
+  ['本站', [['/faq/', '常见问题'], ['/about/', '关于本站'], ['/privacy/', '隐私与推广说明']]],
+] as const;
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -16,25 +24,67 @@ if (breadcrumbs.length) schemas.push({ '@context': 'https://schema.org', '@type'
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" /><meta name="theme-color" content="#245e57" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" /><meta name="theme-color" content="#ffffff" />
     <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content={article ? 'article' : 'website'} /><meta property="og:url" content={canonical} /><meta property="og:locale" content="zh_CN" /><meta property="og:site_name" content={site.name} />
     <script type="application/ld+json" set:html={JSON.stringify(schemas).replace(/</g, '\\u003c')} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <a class="skip" href="#main">跳到正文</a>
-    <header class="site-header"><div class="container header-inner">
-      <a class="brand" href="/" aria-label="Audacity 中文指南首页"><span class="logo" aria-hidden="true">a</span><span>Audacity 中文指南<small>下载 · 操作说明 · 问题排查</small></span></a>
-      <nav class="nav" aria-label="主导航">{nav.map(([path, label]) => <a href={path} aria-current={Astro.url.pathname.startsWith(path) ? 'page' : undefined}>{label}</a>)}<a class="nav-download" href="/download/">下载 Audacity <span aria-hidden="true">↓</span></a></nav>
-    </div></header>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Audacity 中文指南首页"><BrandMark id="brand-header" /><span>Audacity 中文指南</span></a>
+        <nav class="nav" id="site-nav" aria-label="主导航">
+          <a class="nav-mobile-only" href="/download/" aria-current={path.startsWith('/download/') ? 'page' : undefined}><Icon name="download" size={18} />下载中心</a>
+          {nav.map(([href, label]) => <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <a class="btn btn-primary btn-sm header-cta" href="/download/" aria-current={path.startsWith('/download/') ? 'page' : undefined}><Icon name="download" size={17} /><span>下载<span class="hide-sm"> Audacity</span></span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="打开菜单"><Icon name="menu" size={22} class="icon-open" /><Icon name="close" size={22} class="icon-close" /></button>
+      </div>
+    </header>
     <main id="main"><slot /></main>
-    <footer class="site-footer"><div class="container"><div class="footer-top"><div><a class="brand" href="/">Audacity 中文指南</a><p class="fine">教程标注版本，下载列出来源和校验值。</p></div><div class="footer-links"><a href="/download/">下载中心</a><a href="/guides/">中文教程</a><a href="/privacy/">隐私与推广说明</a><a href={site.contact} target="_blank" rel="noopener noreferrer">反馈与纠错 ↗</a></div></div><div class="footer-bottom"><span>独立中文资料站，与 Audacity / Muse Group 无隶属关系。<br />Audacity 名称与相关商标归各自权利人所有。</span><span>© {new Date().getFullYear()} audacitycn.com<br /><a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">软件官网 ↗</a></span></div></div></footer>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand brand-light" href="/"><BrandMark id="brand-footer" /><span>Audacity 中文指南</span></a>
+            <p>独立中文资料站：整理 Audacity 下载、操作步骤和问题排查。教程标注适用版本，下载列出文件来源和 SHA-256。</p>
+            <a class="footer-feedback" href={site.contact} target="_blank" rel="noopener noreferrer"><Icon name="help" size={16} />反馈与纠错<Icon name="external" size={14} /></a>
+          </div>
+          {footerColumns.map(([heading, links]) => <div class="footer-col"><h2>{heading}</h2>{links.map(([href, label]) => <a href={href}>{label}</a>)}</div>)}
+        </div>
+        <div class="footer-bottom">
+          <span>与 Audacity / Muse Group 无隶属关系。Audacity 名称与相关商标归各自权利人所有。</span>
+          <span>© {new Date().getFullYear()} audacitycn.com · <a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">软件官网 ↗</a></span>
+        </div>
+      </div>
+    </footer>
     <script>
+      async function copyText(text: string) {
+        if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+        const area = document.createElement('textarea');
+        area.value = text; area.setAttribute('readonly', ''); area.style.position = 'fixed'; area.style.opacity = '0';
+        document.body.append(area); area.select();
+        const ok = document.execCommand('copy'); area.remove();
+        if (!ok) throw new Error('copy failed');
+      }
       document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(button => {
+        const label = button.querySelector<HTMLElement>('.copy-label') || button;
+        const original = label.textContent;
         button.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(button.dataset.copy || ''); button.textContent = '已复制'; }
-          catch { button.textContent = '请手动选择上方文字复制'; }
+          try { await copyText(button.dataset.copy || ''); label.textContent = '已复制'; button.classList.add('is-done'); }
+          catch { label.textContent = '复制失败，请手动选择'; }
+          window.setTimeout(() => { label.textContent = original; button.classList.remove('is-done'); }, 2200);
         });
       });
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.getElementById('site-nav');
+      if (toggle && nav) {
+        const setOpen = (open: boolean) => { nav.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单'); };
+        toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+        document.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
+        document.addEventListener('click', event => { if (!(event.target instanceof Node) || (!nav.contains(event.target) && !toggle.contains(event.target))) setOpen(false); });
+      }
     </script>
   </body>
 </html>

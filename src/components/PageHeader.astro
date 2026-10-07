@@ -1,0 +1,16 @@
+---
+interface Props { crumbs: { name: string; path?: string }[]; title: string; lead?: string; eyebrow?: string; narrow?: boolean; }
+const { crumbs, title, lead, eyebrow, narrow = false } = Astro.props;
+---
+<header class:list={['page-hero', { 'page-hero-narrow': narrow }]}>
+  <div class="container">
+    <nav class="breadcrumb" aria-label="当前位置">
+      <a href="/">首页</a>
+      {crumbs.map(crumb => <><span class="sep" aria-hidden="true">/</span>{crumb.path ? <a href={crumb.path}>{crumb.name}</a> : <span aria-current="page">{crumb.name}</span>}</>)}
+    </nav>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {lead && <p class="page-lead">{lead}</p>}
+    <slot />
+  </div>
+</header>

@@ -1,17 +1,35 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DownloadPanel from '../../components/DownloadPanel.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
 import downloads from '../../data/downloads.json';
 import { platforms } from '../../data/platforms';
+import { platformIcons } from '../../data/ui';
 export function getStaticPaths(){return platforms.map(platform=>({params:{platform:platform.id},props:{platform}}));}
 const {platform}=Astro.props;
 const schema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'Audacity',softwareVersion:downloads.version,operatingSystem:platform.name,applicationCategory:'MultimediaApplication',url:'https://www.audacityteam.org/',downloadUrl:`https://audacitycn.com/download/${platform.id}/`,isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
 ---
 <Base title={platform.title} description={platform.description} breadcrumbs={[{name:'下载',path:'/download/'},{name:platform.name,path:`/download/${platform.id}/`}]}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / <a href="/download/">下载</a> / {platform.name}</nav><h1>Audacity {platform.name} 下载</h1><p class="lead">{platform.intro}</p></header>
-    <nav class="platform-nav" aria-label="选择电脑系统">{platforms.map(p=><a href={`/download/${p.id}/`} aria-current={p.id===platform.id?'page':undefined}>{p.name}</a>)}</nav>
+  <PageHeader crumbs={[{ name: '下载', path: '/download/' }, { name: platform.name }]} title={`Audacity ${platform.name} 下载`} lead={platform.intro}>
+    <nav class="os-tabs" aria-label="选择电脑系统">
+      {platforms.map(p => <a href={`/download/${p.id}/`} aria-current={p.id === platform.id ? 'page' : undefined}><Icon name={platformIcons[p.id]} size={18} />{p.name}</a>)}
+    </nav>
+  </PageHeader>
+  <div class="container dl-wrap">
     <DownloadPanel platform={platform} />
-    <section class="platform-notes download-info"><h2>{platform.name} 版本选择与使用说明</h2>{platform.notes.map(([heading,body])=><section><h3>{heading}</h3><p>{body}</p></section>)}<div class="sources"><h2>资料来源</h2><ul><li><a href={platform.official} target="_blank" rel="noopener noreferrer">Audacity {platform.name} 官方系统说明</a></li><li><a href={downloads.release} target="_blank" rel="noopener noreferrer">4.0.1 发布记录与校验文件</a></li><li><a href={downloads.legacy.release} target="_blank" rel="noopener noreferrer">3.7.9 发布记录与校验文件</a></li></ul></div><p><a href="/guides/">查看中文操作教程 →</a></p></section>
   </div>
+  <section class="section-sm" aria-labelledby="platform-notes">
+    <div class="container">
+      <h2 class="block-title" id="platform-notes">{platform.name} 版本选择与使用说明</h2>
+      <div class="note-grid">
+        {platform.notes.map(([heading, body], index) => <article class="note-card"><span class="note-no">{String(index + 1).padStart(2, '0')}</span><h3>{heading}</h3><p>{body}</p></article>)}
+      </div>
+      <div class="source-bar">
+        <div><h2>资料来源</h2><ul><li><a href={platform.official} target="_blank" rel="noopener noreferrer">Audacity {platform.name} 官方系统说明<Icon name="external" size={14} /></a></li><li><a href={downloads.release} target="_blank" rel="noopener noreferrer">{downloads.version} 发布记录与校验文件<Icon name="external" size={14} /></a></li><li><a href={downloads.legacy.release} target="_blank" rel="noopener noreferrer">{downloads.legacy.version} 发布记录与校验文件<Icon name="external" size={14} /></a></li></ul></div>
+        <a class="btn btn-secondary" href="/guides/"><Icon name="book" size={18} />查看中文操作教程</a>
+      </div>
+    </div>
+  </section>
 </Base>

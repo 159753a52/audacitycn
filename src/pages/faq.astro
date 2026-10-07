@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
 const items = [
  ['下载与版本', 'Audacity 是免费软件吗？', 'Audacity 免费开源。中文界面包含在程序中，不需要购买激活码或另售的汉化包。网盘会员属于第三方服务，和软件使用权分开。', '/download/', '查看原始安装包'],
  ['下载与版本', 'x64、ARM64 和便携版怎么选？', '普通 Intel / AMD 电脑选 x64。Windows 11 ARM 电脑选 ARM64；当前 ARM64 版有插件限制。MSI 是安装版，7Z 完整解压后运行。先在 Windows 设置中查看系统类型。', '/guides/install/', '版本与安装步骤'],
@@ -17,4 +19,14 @@ const items = [
 ];
 const groups = [...new Set(items.map(x=>x[0]))];
 ---
-<Base title="Audacity 常见问题：录音无声、导出失败与版本选择" description="按现象排查 Audacity：录音直线、有波形没声音、WASAPI 内录、工程文件不能播放、MP3 只导出一段、M4A 导入失败与降噪水声。" breadcrumbs={[{name:'常见问题',path:'/faq/'}]}><div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 常见问题</nav><h1>Audacity 常见问题</h1><p class="lead">先确定是输入、回放、文件还是版本问题。每个回答后面都有详细操作页。</p></header><div class="faq-list">{groups.map(group=><section><h2 class="faq-topic">{group}</h2>{items.filter(x=>x[0]===group).map(([,q,a,url,label])=><details><summary>{q}</summary><p>{a}</p><a href={url}>{label} →</a></details>)}</section>)}</div></div></Base>
+<Base title="Audacity 常见问题：录音无声、导出失败与版本选择" description="按现象排查 Audacity：录音直线、有波形没声音、WASAPI 内录、工程文件不能播放、MP3 只导出一段、M4A 导入失败与降噪水声。" breadcrumbs={[{name:'常见问题',path:'/faq/'}]}>
+  <PageHeader crumbs={[{ name: '常见问题' }]} title="Audacity 常见问题" lead="先确定是输入、回放、文件还是版本问题。每个回答后面都有详细操作页。">
+    <nav class="filter-chips faq-jump" aria-label="问题分类">{groups.map((group, index) => <a href={`#faq-${index + 1}`}>{group}</a>)}</nav>
+  </PageHeader>
+  <div class="container faq-wrap">
+    {groups.map((group, index) => <section class="faq-group" aria-labelledby={`faq-${index + 1}`}>
+      <h2 class="faq-topic" id={`faq-${index + 1}`}>{group}</h2>
+      <div class="faq-list">{items.filter(x=>x[0]===group).map(([,q,a,url,label])=><details class="faq-item"><summary><span>{q}</span><span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer"><p>{a}</p><a class="link-more" href={url}>{label}<Icon name="arrow" size={16} /></a></div></details>)}</div>
+    </section>)}
+  </div>
+</Base>
