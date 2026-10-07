@@ -27,7 +27,7 @@ const schema={'@context':'https://schema.org','@type':'SoftwareApplication',name
         {platform.notes.map(([heading, body], index) => <article class="note-card"><span class="note-no">{String(index + 1).padStart(2, '0')}</span><h3>{heading}</h3><p>{body}</p></article>)}
       </div>
       <div class="source-bar">
-        <div><h2>资料来源</h2><ul><li><a href={platform.official} target="_blank" rel="noopener noreferrer">Audacity {platform.name} 官方系统说明<Icon name="external" size={14} /></a></li><li><a href={downloads.release} target="_blank" rel="noopener noreferrer">{downloads.version} 发布记录与校验文件<Icon name="external" size={14} /></a></li><li><a href={downloads.legacy.release} target="_blank" rel="noopener noreferrer">{downloads.legacy.version} 发布记录与校验文件<Icon name="external" size={14} /></a></li></ul></div>
+        <div><h2>资料来源</h2><ul><li><a href={platform.official} target="_blank" rel="noopener noreferrer">Audacity {platform.name} 官方系统说明<Icon name="external" size={14} /></a></li><li><a href={downloads.release} target="_blank" rel="noopener noreferrer">{downloads.version} 官方发布记录<Icon name="external" size={14} /></a></li><li><a href={downloads.legacy.release} target="_blank" rel="noopener noreferrer">{downloads.legacy.version} 官方发布记录<Icon name="external" size={14} /></a></li></ul></div>
         <a class="btn btn-secondary" href="/guides/"><Icon name="book" size={18} />查看中文操作教程</a>
       </div>
     </div>

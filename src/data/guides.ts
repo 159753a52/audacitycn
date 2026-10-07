@@ -1,12 +1,169 @@
-export interface GuideSection { title: string; paragraphs?: string[]; steps?: string[]; table?: { headers: string[]; rows: string[][] }; code?: string; note?: string; }
+export interface GuideSection { title: string; paragraphs?: string[]; steps?: string[]; table?: { headers: string[]; rows: string[][] }; code?: string; note?: string; links?: string[][]; }
 export interface Guide { slug: string; title: string; short: string; category: string; intro: string; applies: string; updated: string; answer: string; related: string[]; sections: GuideSection[]; tip?: string; sources: string[][]; }
 export const guides: Guide[] = [
+  {
+    slug: 'getting-started',
+    title: 'Audacity 怎么用：新手入门，从录音、剪辑到导出 MP3',
+    short: '新手入门：第一次用',
+    category: '入门',
+    intro: '按官方 4.x 入门顺序走一遍：建轨道、录音、看波形、剪辑、加效果、保存工程和导出音频，每一步都附详细教程。',
+    applies: 'Audacity 4.x',
+    updated: '2026-10-07',
+    answer: '点 Add track 新建 Mono 轨道，选中轨道后按 R 录音、空格停止；拖选口误按 Delete 删除；在轨道的 Effects 里加实时效果；Ctrl + S 保存 .aup4 工程；最后用 File → Export audio（Ctrl + Shift + E）导出 MP3 或 WAV。',
+    related: ['record-voice', 'edit-audio', 'export-audio'],
+    sections: [
+      {
+        title: '一次完整流程',
+        table: { headers: ['步骤', '怎么做', '细看'], rows: [
+          ['1. 建轨道', 'Add track → Mono；一支麦克风录人声用单声道', '麦克风录音设置'],
+          ['2. 录音', '选中轨道，按 Record 或 R；空格停止', '麦克风录音设置'],
+          ['3. 剪辑', '拖选要去掉的部分，按 Delete', '剪切、分割与拼接'],
+          ['4. 处理', '降噪、压缩或均衡', '背景底噪处理'],
+          ['5. 保存', 'Ctrl + S，得到可继续修改的 .aup4 工程', '导出 MP3 和 WAV'],
+          ['6. 导出', 'File → Export audio，选 MP3、WAV 等格式', '导出 MP3 和 WAV'],
+        ] },
+      },
+      {
+        title: '录第一段声音',
+        paragraphs: ['录下的声音放在“片段”（clip）里，片段放在轨道上。先建好轨道再录，后面剪辑会顺手很多。'],
+        steps: [
+          '点轨道区上方的 Add track，选择 Mono。一支麦克风只有一个声道，录人声用 Mono；音乐或本来就是立体声的来源用 Stereo。',
+          '点一下轨道左侧的轨道头，选中这条轨道。录音会进入选中的轨道；一条轨道都没有时，按录音会自动新建。',
+          '对着麦克风正常说话，看轨道头上的电平表：说话时的峰值落在 −18 dB 到 −6 dB 之间比较合适。',
+          '点红色的 Record 按钮或按 R 开始录音；按 Pause 暂停，再按一次会接着录在同一个片段里。',
+          '按 Stop 或空格结束，再按空格从播放头位置回放。',
+        ],
+        note: '每次开录前先录几秒安静的房间声，既方便剪掉开头，也能留作降噪时的噪声样本。',
+        links: [['麦克风录音设置', '/guides/record-voice/'], ['录电脑内部声音', '/guides/record-desktop/']],
+      },
+      {
+        title: '看波形判断录得好不好',
+        table: { headers: ['波形样子', '说明', '怎么办'], rows: [
+          ['顶满整条轨道的实心块', '音量过大，波峰被削平（削波）', '削波无法修复，调低输入音量后重录；View → Show clipping in waveform 会把削波处标红'],
+          ['几乎是一条直线', '音量太小', '调高输入或靠近麦克风后重录；没法重录时可用 Amplify 放大，但底噪会一起变大'],
+          ['起伏清楚，峰值离顶部还有距离', '音量合适', '可以开始剪辑'],
+        ] },
+        links: [['录音没声音怎么办', '/guides/no-sound/']],
+      },
+      {
+        title: '基础剪辑：删、留、静音',
+        paragraphs: ['在波形上按住拖动，就是选中一段时间范围；按住 Shift 再点击可以延长选区，Ctrl + A 全选。按住 Ctrl 滚动滚轮能以指针为中心缩放，方便把选区边缘放准。动手前先按播放，听一下选中的范围对不对。'],
+        table: { headers: ['想做的事', '操作', '结果'], rows: [
+          ['删掉口误', '选中后按 Delete', '第一次删除会询问：留下空白（Leave a gap），或让后面的内容前移补上（Close gap）'],
+          ['只留选中的部分', 'Trim clip（Ctrl + T）', '去掉片段里选区以外的内容，适合一次切掉头尾的空白'],
+          ['把咳嗽变成静音', 'Silence audio（Ctrl + L）', '选区变成无声，时长不变，后面的节奏不受影响'],
+          ['在某处切开', '按 S 打开分割工具后点击，或放好光标按 Ctrl + I', '一个片段变成两个，可以分别移动或删除'],
+        ] },
+        note: 'Shift + Delete 只在当前轨道删除并合拢空隙；Ctrl + Delete 在所有轨道上一起删除并合拢，多条轨道保持对齐。',
+        links: [['剪切、分割与拼接', '/guides/edit-audio/']],
+      },
+      {
+        title: '加效果：直接改写，还是随时可调',
+        paragraphs: ['实时效果按从上到下的顺序处理。点效果旁边的电源按钮可以临时关闭，对比处理前后的声音；要彻底去掉，在效果名旁的三角菜单里选 No effect。'],
+        table: { headers: ['方式', '怎么加', '特点'], rows: [
+          ['Effect 菜单', '先选中一段，再从 Effect 菜单选效果', '直接改写音频；工程打开期间可以撤销，关闭工程后就成为音频的一部分'],
+          ['实时效果', '点轨道头上的 Effects（快捷键 E），在面板里 Add effect', '不改原始录音，播放时计算，可以随时调整、关闭或删除；作用于整条轨道'],
+          ['Master effects', '实时效果面板底部', '作用于所有轨道混合后的整体声音'],
+        ] },
+        links: [['背景底噪处理', '/guides/noise-reduction/']],
+      },
+      {
+        title: '保存工程，再导出成音频',
+        steps: [
+          '开始录音后尽早按 Ctrl + S。第一次保存选择 Save to computer，填写名称和位置，得到 .aup4 工程文件；之后再按 Ctrl + S 都存到同一个文件。',
+          '.aup4 只能用 Audacity 打开，里面保留轨道、片段、剪辑和实时效果，以后还能接着改。保存过的工程会出现在 Home 页，方便再次打开。',
+          '要发给别人或上传，用 File → Export audio（Ctrl + Shift + E）。Type 选 Export full project audio 导出整个工程，也可以只导出选区或循环区域。',
+          '没有特别要求时选 MP3：人声 128 kbps、音乐 256 kbps 是稳妥的起点。单声道录音按单声道导出，选立体声只会得到两个相同的声道，文件大一倍。',
+        ],
+        note: 'Save to cloud 会把工程存到 audio.com，需要账号和网络；只想存在自己电脑上时选 Save to computer。',
+        links: [['导出 MP3 和 WAV', '/guides/export-audio/']],
+      },
+    ],
+    tip: '本页按 Audacity 4.x 官方入门手册整理。3.x 的菜单和快捷键有差异，例如 3.x 的工程是 .aup3，分割方式也不同；遇到对不上的地方，先确认软件版本。',
+    sources: [
+      ['官方 4.x 入门总览', 'https://www.audacityteam.org/manual/getting-started/'],
+      ['官方：录第一段声音', 'https://www.audacityteam.org/manual/getting-started/make-your-first-recording'],
+      ['官方：基础剪辑', 'https://www.audacityteam.org/manual/getting-started/basic-audio-editing'],
+      ['官方：添加第一个效果', 'https://www.audacityteam.org/manual/getting-started/apply-your-first-effect'],
+      ['官方：保存工程', 'https://www.audacityteam.org/manual/getting-started/save-your-project'],
+      ['官方：导出音频', 'https://www.audacityteam.org/manual/getting-started/export-your-audio'],
+    ],
+  },
+  {
+    slug: 'chinese-language',
+    title: 'Audacity 怎么设置中文：4.x 和 3.x 的语言选项位置',
+    short: '设置中文界面',
+    category: '设置',
+    intro: 'Audacity 自带简体中文界面，不需要另找汉化包。4.x 在偏好设置的 General 页切换语言，3.x 在 Interface 页；菜单看不懂时也能按位置找到。',
+    applies: 'Audacity 4.x / 3.x · Windows、macOS、Linux',
+    updated: '2026-10-07',
+    answer: 'Windows、Linux 打开 Edit → Preferences，macOS 从左上角的应用菜单打开偏好设置。4.x 在 General 页的 Language 选简体中文；3.x 在 Interface 页的 Language 选简体中文后点 OK，个别文字要重启后才切换。',
+    related: ['getting-started', 'install', 'record-voice'],
+    sections: [
+      {
+        title: '两个版本的位置对照',
+        table: { headers: ['版本', '打开偏好设置', '语言选项', '切换后'], rows: [
+          ['Audacity 4.x', 'Edit → Preferences；macOS 在应用菜单里', 'General 页 → Language', '同一页可以更新当前语言包'],
+          ['Audacity 3.x', 'Edit → Preferences（Ctrl + P）；macOS 在 Audacity 菜单（⌘ + ,）', 'Interface 页 → Language', '点 OK 后大部分界面立即切换，少数文字重启后切换'],
+        ] },
+      },
+      {
+        title: '4.x：在 General 页切换',
+        steps: [
+          '打开 Edit 菜单，选择 Preferences；macOS 从屏幕左上角的应用菜单打开。',
+          '在左侧列表选择 General。这一页放着界面语言、数字格式、自动更新、临时文件和 FFmpeg 等设置。',
+          '在 Language 中选择简体中文；同一页还可以更新当前语言包。',
+          '如果还有文字没变成中文，关闭 Audacity 再重新打开看看。',
+        ],
+        note: '4.x 的偏好设置里没有 Interface 页。网上 3.x 的截图和教程，在 4.x 里对不上位置。',
+      },
+      {
+        title: '3.x：在 Interface 页切换',
+        paragraphs: ['3.x 默认跟随操作系统的语言。只想改 Audacity 的语言，在它自己的偏好设置里修改即可，不影响系统设置。'],
+        steps: [
+          '按 Ctrl + P（macOS 按 ⌘ + ,）打开 Preferences，也可以从菜单进入。',
+          '在左侧选择 Interface。',
+          '在 Language 下拉框中选择简体中文，点 OK。',
+          '大部分菜单会立即变成中文；剩下的少数文字，重启 Audacity 后切换。',
+        ],
+      },
+      {
+        title: '菜单是看不懂的文字时（3.x）',
+        paragraphs: ['界面变成不认识的语言，或者显示成问号时，可以只按位置操作：'],
+        steps: [
+          '点顶部菜单栏左起第二个菜单（macOS 点左起第一个）。',
+          '点这个菜单的最后一项（macOS 点第二项），打开偏好设置。',
+          '在左侧列表中选择从上往下第五项。',
+          '打开右侧第二个下拉框，选中简体中文后按回车。',
+          '重启 Audacity，让所有文字完成切换。',
+        ],
+        note: '这组位置来自 3.x 官方手册，只适用于 3.x；4.x 请按上面的 General 页操作。',
+      },
+      {
+        title: '语言列表里只有 English 或 System',
+        paragraphs: ['按 3.x 官方手册，这时要检查语言文件夹是否还在原来的位置：'],
+        table: { headers: ['系统', '应有的位置'], rows: [
+          ['Windows', 'C:\\Program Files\\<Audacity 安装目录>\\Languages'],
+          ['macOS', '在“应用程序”里右键 Audacity，选“显示包内容”，查看 Contents/Resources'],
+          ['Linux', '软件仓库安装：/usr/share/locale；自行编译：/usr/local/share/locale'],
+        ] },
+        note: '3.x 重新安装不会改掉已保存的语言设置；只有在 Windows 安装程序里明确选择 Reset Preferences，才会恢复默认。',
+      },
+    ],
+    tip: '中文界面是 Audacity 自带的功能，不需要购买“中文版”，也不需要下载汉化补丁。',
+    sources: [
+      ['官方 4.x 偏好设置总览', 'https://www.audacityteam.org/manual/preferences'],
+      ['官方 4.x General 设置页', 'https://www.audacityteam.org/manual/preferences/general'],
+      ['官方 3.x 语言设置说明', 'https://manual.audacityteam.org/man/languages.html'],
+      ['官方 3.x Interface 偏好设置', 'https://manual.audacityteam.org/man/interface_preferences.html'],
+    ],
+  },
   {
     "slug": "install",
     "title": "Audacity 中文版下载安装：x64、ARM64 和便携版怎么选",
     "short": "下载安装与版本选择",
     "category": "安装",
-    "intro": "按系统类型选择 x64 或 ARM64，区分 MSI 与 7Z，并用 SHA-256 核对原始文件。",
+    "intro": "按系统类型选择 x64 或 ARM64，区分 MSI 安装版与 7Z 便携版，并核对下载到的文件名。",
     "applies": "Windows 10 / 11 · Audacity 4.0.1",
     "sections": [
       {
@@ -54,11 +211,10 @@ export const guides: Guide[] = [
         ]
       },
       {
-        "title": "用 PowerShell 核对下载文件",
+        "title": "下载后先核对文件名",
         "paragraphs": [
-          "在下载页对照文件名和 SHA-256。下面以 x64 MSI 为例；文件不在“下载”目录时，把路径改成实际路径。Hash 应与官方下载页和本站所列值一致，不一致时重新下载核对。"
-        ],
-        "code": "Get-FileHash \"$env:USERPROFILE\\Downloads\\audacity-win-4.0.1-x86_64.msi\" -Algorithm SHA256"
+          "在下载页选好系统和电脑类型后，页面会列出对应的原始文件名，文件名里写着版本和架构：x64 安装版是 audacity-win-4.0.1-x86_64.msi，ARM64 安装版是 audacity-win-4.0.1-arm64.msi，便携版的扩展名是 .7z。下载到的文件名和所选不一致时，先不要安装，回到下载页重新选择。"
+        ]
       },
       {
         "title": "MSI 和便携版各自怎么用",
@@ -567,7 +723,7 @@ export const guides: Guide[] = [
       {
         "title": "先保存工程",
         "paragraphs": [
-          "Audacity 4 按 Ctrl + S 保存工程，首次保存时选择 Save to computer 并填写文件名，得到 .aup4。工作中的工程先放本机磁盘，退出程序后再备份到网盘。导出成品用于分享，工程保留给后续修改。"
+          "Audacity 4 按 Ctrl + S 保存工程，首次保存时选择 Save to computer 并填写文件名，得到 .aup4。工作中的工程先放本机磁盘，退出程序后再复制一份到移动硬盘等其他位置备份。导出成品用于分享，工程保留给后续修改。"
         ]
       },
       {

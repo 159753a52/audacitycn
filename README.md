@@ -28,13 +28,13 @@ Cloudflare Pages：生产分支 `main`；构建命令 `npm run build`；输出�
 
 ## 内容与版本
 
-`src/data/guides.ts` 维护 8 篇教程：首屏设置、适用版本、实际核对日期、步骤、对照表、参考资料和相关问题。4.x 与 3.x 操作差异需要明确标注，不能机械替换版本号；`.aup4`、Noise only 等以当前官方手册为准。下载文件来源和 SHA-256 核对官方各系统下载页与 GitHub 对应版本 CHECKSUMS.txt。日期只在实际核对或内容更新后修改。
+`src/data/guides.ts` 维护 10 篇教程：首屏设置、适用版本、实际核对日期、步骤、对照表、参考资料和相关问题。4.x 与 3.x 操作差异需要明确标注，不能机械替换版本号；`.aup4`、Noise only 等以当前官方手册为准。下载文件来源和 SHA-256 核对官方各系统下载页与 GitHub 对应版本 CHECKSUMS.txt。日期只在实际核对或内容更新后修改。
 
 镜像分发时保留版权与许可证，并按相应许可证提供匹配版本源码。软件本身免费，不得把网盘会员描述为使用 Audacity 的必要条件。
 
 ## 发布检查
 
-构建末尾检查唯一标题/描述、本页 canonical、h1、目录锚点、JSON-LD、站内链接、sitemap、下载域名及校验值。Google 所有权验证文件单独核对其精确内容，不当作文章加入 sitemap；不要移除 `public/google2d95f7b9770ef0ba.html`。`npm run indexnow` 在正式域名线上密钥可访问时提交，收录和排名由搜索引擎决定。
+构建末尾检查唯一标题/描述、本页 canonical、h1、目录锚点、JSON-LD、站内链接、sitemap、下载域名及校验值配置；同时检查：除 `/download/` 下的页面外不出现“网盘”二字，所有页面都不显示 SHA-256 等校验值（校验值只留在配置里供构建时核对）。Google 所有权验证文件单独核对其精确内容，不当作文章加入 sitemap；不要移除 `public/google2d95f7b9770ef0ba.html`。`npm run indexnow` 在正式域名线上密钥可访问时提交，收录和排名由搜索引擎决定。
 
 反馈入口暂使用 `https://github.com/159753a52/audacitycn/issues`。网站不伪装官方，不编造使用量、评分或测试结论。
 

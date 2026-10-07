@@ -3,12 +3,12 @@ export const platforms = [
     id: 'windows', name: 'Windows', defaultArchitecture: 'x64',
     summary: 'Intel / AMD x64、ARM64；3.7.9 另有 32 位版。',
     title: 'Audacity Windows 中文下载：x64、ARM64 与 32 位旧版',
-    description: '按架构和版本选择 Audacity Windows 网盘下载。提供 4.0.1 MSI / 7Z、3.7.9 EXE / ZIP，夸克、UC、迅雷及 Windows x64 百度分享，附文件名与 SHA-256。',
+    description: '按架构和版本选择 Audacity Windows 网盘下载。提供 4.0.1 MSI / 7Z、3.7.9 EXE / ZIP，夸克、UC、迅雷及 Windows x64 百度分享，并列出对应文件名。',
     intro: '普通 Intel / AMD 电脑通常选 x64。ARM 设备和 32 位系统请先核对“设置 → 系统 → 系统信息”中的系统类型。',
     notes: [
       ['4.0.1：安装版还是便携版？', 'MSI 按向导安装；7Z 需要完整解压后运行。当前版官方测试系统是 Windows 10 / 11。ARM64 版面向 Windows 11 ARM，官方注明暂不支持插件；FFmpeg 也需要匹配 ARM 架构。'],
       ['3.7.9：保留旧工作流', '3.7.9 提供 32 位、64 位、ARM64 的 EXE 和 ZIP。需要 32 位程序或继续处理 3.x 工程时，可以选这个版本。存在 32 位安装包不代表支持所有旧版 Windows。'],
-      ['安装后先做一次短录音', '首次启动先选择录音与回放设备，录制 10 秒并试听。工程保存在本机磁盘，完成后再备份到网盘。中文界面已包含在程序中，无需另找汉化包。'],
+      ['安装后先做一次短录音', '首次启动先选择录音与回放设备，录制 10 秒并试听。工程保存在本机磁盘，完成后再另外复制一份备份。中文界面已包含在程序中，无需另找汉化包。'],
     ],
     official: 'https://www.audacityteam.org/download/windows/',
   },
@@ -16,7 +16,7 @@ export const platforms = [
     id: 'macos', name: 'macOS', defaultArchitecture: 'universal',
     summary: 'Apple Silicon、Intel、通用版；DMG 与旧版 PKG。',
     title: 'Audacity Mac 中文下载：Apple Silicon、Intel 与通用版',
-    description: 'Audacity macOS 网盘下载与版本选择。覆盖 4.0.1 和 3.7.9 的 Apple Silicon ARM64、Intel x64、通用版 DMG，以及 3.7.9 PKG，附安装说明与 SHA-256。',
+    description: 'Audacity macOS 网盘下载与版本选择。覆盖 4.0.1 和 3.7.9 的 Apple Silicon ARM64、Intel x64、通用版 DMG，以及 3.7.9 PKG，附安装说明。',
     intro: '在苹果菜单的“关于本机”查看芯片：M 系列选 Apple Silicon，Intel 处理器选 Intel。不确定时可选通用版，再留意系统版本限制。',
     notes: [
       ['先看芯片，再看 macOS 版本', '当前 4.0.1 官方测试于 macOS 14 / 15。macOS 10.14 及更早系统不要选择通用 DMG，官方说明应使用 Intel DMG；这也不代表所有旧系统都经过测试。'],
@@ -29,7 +29,7 @@ export const platforms = [
     id: 'linux', name: 'Linux', defaultArchitecture: 'x64',
     summary: '4.0.1 x86_64 / ARM64 AppImage；3.7.9 x64。',
     title: 'Audacity Linux 下载：x86_64、ARM64 AppImage 与旧版',
-    description: '通过夸克、UC、迅雷获取 Audacity Linux 原始 AppImage。整理 4.0.1 x86_64 / ARM64 和 3.7.9 x64 的 20.04 / 22.04 文件，说明运行权限、FUSE 2 与 SHA-256 核对。',
+    description: '通过夸克、UC、迅雷获取 Audacity Linux 原始 AppImage。整理 4.0.1 x86_64 / ARM64 和 3.7.9 x64 的 20.04 / 22.04 文件，说明运行权限与 FUSE 2。',
     intro: '先确认系统架构。x86_64 的 Intel / AMD 电脑选 x64；aarch64 设备选 ARM64。3.7.9 的官方发布包只有这里列出的 x64 AppImage。',
     notes: [
       ['AppImage 启动前', '下载到本机目录，在文件属性中允许“作为程序执行”。当前版官方测试于 Ubuntu 22.04，运行 AppImage 需要 FUSE 2；缺少运行依赖时按发行版文档安装对应软件包。'],

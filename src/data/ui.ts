@@ -1,5 +1,7 @@
 // 教程卡片的图标与配色，只影响外观。
 export const guideIcons: Record<string, string> = {
+  'getting-started': 'play',
+  'chinese-language': 'language',
   install: 'download',
   'record-voice': 'mic',
   'record-desktop': 'monitor',
@@ -11,6 +13,8 @@ export const guideIcons: Record<string, string> = {
 };
 
 export const categoryTones: Record<string, string> = {
+  入门: 'indigo',
+  设置: 'green',
   安装: 'blue',
   录音: 'rose',
   剪辑: 'violet',
@@ -40,7 +44,7 @@ export const archChoices: Record<string, { id: string; label: string; short: str
   ],
 };
 
-// 网盘方块上的简称与品牌色，不使用平台商标图片。
+// 下载页分享方块上的简称与品牌色，不使用平台商标图片。
 export const providerBadges: Record<string, { short: string; color: string }> = {
   quark: { short: '夸', color: '#3b5bfd' },
   uc: { short: 'UC', color: '#f26b1d' },

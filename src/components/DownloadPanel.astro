@@ -30,7 +30,7 @@ const initialChoice = choices.find(c => c.id === initialArchitecture)!;
 <section class="dl card" data-download data-platform={platform.id} data-platform-name={platform.name} data-default-architecture={initialArchitecture} aria-labelledby="choose-download">
   <div class="dl-head">
     <div><h2 id="choose-download">选择版本与网盘</h2><p>依次选好三项，每次只显示对应的一个分享码。</p></div>
-    <span class="chip chip-ok"><Icon name="shield" size={15} />原始文件 · 附 SHA-256</span>
+    <span class="chip chip-ok"><Icon name="shield" size={15} />官方原始文件 · 未重新打包</span>
   </div>
   <div class="dl-body">
     <div class="dl-steps">
@@ -81,14 +81,13 @@ const initialChoice = choices.find(c => c.id === initialArchitecture)!;
     </div>
   </div>
   <div class="dl-files" aria-labelledby="file-list-heading">
-    <div class="dl-files-head"><h3 id="file-list-heading">进入网盘后，找这个文件</h3><p class="fine">每个分享按版本整理了全部系统的文件。复制文件名可在网盘里搜索；下载后可用 SHA-256 与官方发布记录核对。</p></div>
+    <div class="dl-files-head"><h3 id="file-list-heading">进入网盘后，找这个文件</h3><p class="fine">每个分享按版本整理了全部系统的文件。复制文件名，可以在网盘里直接搜索。</p></div>
     {groups.map(g => <div class="file-group" data-file-version={g.version} hidden={g.version !== downloads.version}>
       {g.files.filter(f => f.platform === platform.id).map(f => <article class="file-row" data-file-architecture={f.architecture} hidden={f.architecture !== initialArchitecture}>
         <span class="file-icon" aria-hidden="true">{f.format}</span>
-        <div class="file-main"><h4>{f.title}<span class="file-size">{mib(f.bytes)}</span></h4><p class="file-name"><code>{f.filename}</code><button class="copy copy-mini" type="button" data-copy={f.filename} title="复制文件名"><Icon name="copy" size={14} /><span class="copy-label">复制</span></button></p>
-        <details class="sha"><summary><Icon name="hash" size={15} />SHA-256</summary><div class="sha-body"><code>{f.sha256}</code><button class="copy" type="button" data-copy={f.sha256}><Icon name="copy" size={15} /><span class="copy-label">复制校验值</span></button></div></details></div>
+        <div class="file-main"><h4>{f.title}<span class="file-size">{mib(f.bytes)}</span></h4><p class="file-name"><code>{f.filename}</code><button class="copy copy-mini" type="button" data-copy={f.filename} title="复制文件名"><Icon name="copy" size={14} /><span class="copy-label">复制</span></button></p></div>
       </article>)}
-      <details class="source-files"><summary><Icon name="folder" size={17} />同一分享里的源码{g.version === downloads.legacy.version ? '、离线手册' : ''}与许可证</summary><p class="fine">分享中还提供源码、LICENSE.txt、CHECKSUMS.txt 和来源说明。源码压缩包保留官方原文件。</p><ul>{g.files.filter(f => f.platform === 'shared').map(f => <li><span>{f.title} · {f.format} · {mib(f.bytes)}</span><code>{f.filename}</code><details class="sha"><summary><Icon name="hash" size={15} />SHA-256</summary><div class="sha-body"><code>{f.sha256}</code></div></details></li>)}</ul></details>
+      <details class="source-files"><summary><Icon name="folder" size={17} />同一分享里的源码{g.version === downloads.legacy.version ? '、离线手册' : ''}与许可证</summary><p class="fine">分享中还提供源码、许可证（LICENSE.txt）和来源说明。源码压缩包保留官方原文件。</p><ul>{g.files.filter(f => f.platform === 'shared').map(f => <li><span>{f.title} · {f.format} · {mib(f.bytes)}</span><code>{f.filename}</code></li>)}</ul></details>
     </div>)}
   </div>
   <p class="fine dl-foot">登录、转存、下载速度及客户端要求由网盘决定。文件为原始发布包，未重新打包。{platform.id === 'windows' ? '百度分享仅覆盖 4.0.1 的 Windows x64。' : ''}</p>

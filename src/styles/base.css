@@ -107,6 +107,8 @@ code { font-family: var(--mono); }
 .tone-teal { --tone: #0d9488; --tone-soft: #ecfbf8; --tone-ink: #0f766e; }
 .tone-amber { --tone: #d97706; --tone-soft: #fff8e8; --tone-ink: #a35a04; }
 .tone-orange { --tone: #ea580c; --tone-soft: #fff3eb; --tone-ink: #c2410c; }
+.tone-indigo { --tone: #4f46e5; --tone-soft: #f0f0ff; --tone-ink: #4338ca; }
+.tone-green { --tone: #16a34a; --tone-soft: #ecfbf1; --tone-ink: #15803d; }
 [class*="tone-"] .icon-tile { background: var(--tone-soft); color: var(--tone-ink); }
 .text-link { color: var(--primary-ink); text-decoration: underline; text-decoration-color: rgba(31, 69, 214, .35); text-underline-offset: 3px; }
 .text-link:hover { text-decoration-color: currentColor; }

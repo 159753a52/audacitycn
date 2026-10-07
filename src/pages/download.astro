@@ -19,8 +19,8 @@ const coverage = providerIds.map(id => ({
   }),
 }));
 ---
-<Base title="Audacity 中文下载：Windows、Mac、Linux 网盘与版本选择" description="按系统选择 Audacity 原始文件下载：Windows、macOS、Linux。整理当前 4.0.1 与 3.x 旧版 3.7.9，分架构列出文件名、SHA-256、网盘分享与二维码。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
-  <PageHeader crumbs={[{ name: '下载' }]} title="Audacity 下载中心" lead="先选电脑系统，再选版本和网盘。每次只显示你选中的分享二维码；文件名和校验值放在同一页。">
+<Base title="Audacity 中文下载：Windows、Mac、Linux 网盘与版本选择" description="按系统选择 Audacity 原始文件下载：Windows、macOS、Linux。整理当前 4.0.1 与 3.x 旧版 3.7.9，分架构列出文件名、网盘分享与二维码。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
+  <PageHeader crumbs={[{ name: '下载' }]} title="Audacity 下载中心" lead="先选电脑系统，再选版本和网盘。每次只显示你选中的分享二维码，并列出对应的文件名。">
     <ul class="release-strip">
       <li><span>当前版</span><strong>{downloads.version}</strong></li>
       <li><span>3.x 旧版</span><strong>{downloads.legacy.version}</strong></li>
@@ -46,7 +46,7 @@ const coverage = providerIds.map(id => ({
     <div class="container info-grid">
       <div class="info-main">
         <h2 class="block-title" id="pan-coverage">网盘里面有哪些文件？</h2>
-        <p class="info-text">夸克、UC、迅雷按版本提供 Windows、Mac 和 Linux 的原始发布包，并保留对应源码、许可证、CHECKSUMS.txt 与来源说明。3.7.9 另有离线手册。百度目前只提供 4.0.1 Windows x64。</p>
+        <p class="info-text">夸克、UC、迅雷按版本提供 Windows、Mac 和 Linux 的原始发布包，并保留对应源码、许可证与来源说明。3.7.9 另有离线手册。百度目前只提供 4.0.1 Windows x64。</p>
         <div class="table-wrap">
           <table class="cover-table">
             <thead><tr><th scope="col">网盘</th>{groups.map((g, i) => <th scope="col">{g.version}<small>{i === 0 ? '当前版' : '3.x 旧版'}</small></th>)}</tr></thead>
@@ -61,9 +61,15 @@ const coverage = providerIds.map(id => ({
           <p>初次使用可从 4.0.1 开始。需要 32 位 Windows 程序，或继续使用 3.x 的工程与插件工作流，可选择 3.7.9。4.x 保存 .aup4 工程，3.x 保存 .aup3；升级前保留原工程副本，不要直接覆盖唯一备份。</p>
         </article>
         <article class="side-card">
+          <h2>网盘下载要登录或买会员吗？</h2>
+          <p>登录、转存、客户端和免费额度由各网盘自己的页面决定。本站提供原始文件的分享入口；若某个入口属于计佣推广，会在下载处标明。Audacity 免费使用，不以购买网盘会员为条件。</p>
+        </article>
+        <article class="side-card">
           <h2>下载后先看这些</h2>
           <ul class="side-links">
-            <li><a href="/guides/install/"><Icon name="download" size={18} />Windows 安装与中文界面设置</a></li>
+            <li><a href="/guides/install/"><Icon name="download" size={18} />Windows 安装与版本选择</a></li>
+            <li><a href="/guides/chinese-language/"><Icon name="language" size={18} />把界面设置成中文</a></li>
+            <li><a href="/guides/getting-started/"><Icon name="play" size={18} />新手入门：录音、剪辑到导出</a></li>
             <li><a href="/guides/record-voice/"><Icon name="mic" size={18} />录一段声音，检查设备与电平</a></li>
             <li><a href="/guides/export-audio/"><Icon name="export" size={18} />工程保存与 MP3 / WAV 导出</a></li>
           </ul>
