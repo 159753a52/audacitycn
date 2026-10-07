@@ -1,58 +1,137 @@
 ---
 import QRCode from 'qrcode';
+import Icon from './Icon.astro';
 import downloads from '../data/downloads.json';
-import { architectureNames } from '../data/platforms';
+import { archChoices, platformIcons, providerBadges } from '../data/ui';
 import { validateDownloads, availableMirrors } from '../../scripts/config.mjs';
 validateDownloads(downloads);
 const { platform } = Astro.props;
 const groups = [downloads, downloads.legacy];
-const architectures = [...new Set(groups.flatMap(g=>g.files.filter(f=>f.platform===platform.id).map(f=>f.architecture)))];
+const versionNames: Record<string, string> = { [downloads.version]: '当前版', [downloads.legacy.version]: '3.x 旧版' };
+const choices = archChoices[platform.id]
+  .map(choice => ({ ...choice, versions: groups.filter(g => g.files.some(f => f.platform === platform.id && f.architecture === choice.id)).map(g => g.version) }))
+  .filter(choice => choice.versions.length);
+const shortArch = (id: string) => choices.find(c => c.id === id)?.short ?? id;
 const initialArchitecture = platform.defaultArchitecture;
-const entries = await Promise.all(groups.flatMap(g=>g.mirrors.filter(m=>m.enabled && m.scope.some(s=>s.startsWith(`${platform.id}:`))).map(async m=>({ ...m, qr: 'qrImage' in m ? m.qrImage : await QRCode.toDataURL(m.url, {width:320,margin:3,errorCorrectionLevel:'M',color:{dark:'#232d2b',light:'#ffffff'}}) }))));
-const providers = [...new Map(entries.map(m=>[m.id,m.name])).entries()];
-const initialProvider = availableMirrors(downloads,platform.id,initialArchitecture)[0].id;
+const initialAvailable = availableMirrors(downloads, platform.id, initialArchitecture);
+const qrSvg = async (url: string) => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(await QRCode.toString(url, { type: 'svg', margin: 2, errorCorrectionLevel: 'M', color: { dark: '#0f172aff', light: '#ffffffff' } }))}`;
+const entries = await Promise.all(groups.flatMap(g => g.mirrors.filter(m => m.enabled && m.scope.some(s => s.startsWith(`${platform.id}:`))).map(async m => ({ ...m, qr: 'qrImage' in m ? m.qrImage : await qrSvg(m.url) }))));
+const providers = [...new Map(entries.map(m => [m.id, m.name])).entries()].map(([id, name]) => {
+  const own = entries.filter(m => m.id === id);
+  const archSets = own.map(m => m.scope.includes(`${platform.id}:*`) ? null : m.scope.filter(s => s.startsWith(`${platform.id}:`)).map(s => s.split(':')[1]));
+  const versionText = own.length < groups.length ? own.map(m => m.version).join(' / ') : '';
+  const archText = archSets.every(a => a === null) ? '' : [...new Set(archSets.flat().filter((a): a is string => Boolean(a)))].map(shortArch).join(' / ');
+  return { id, name, limit: versionText || archText ? `仅 ${[versionText, archText].filter(Boolean).join(' · ')}` : '' };
+});
+const initialProvider = initialAvailable[0].id;
+const mib = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
+const initialChoice = choices.find(c => c.id === initialArchitecture)!;
 ---
-<section class="download-picker" data-platform={platform.id} data-default-architecture={initialArchitecture} aria-labelledby="choose-download">
-  <h2 id="choose-download">选择版本与网盘</h2>
-  <div class="picker-controls">
-    <label for="download-version"><span>1 · 版本</span><select id="download-version">{groups.map((g,i)=><option value={g.version}>{g.version}{i===0?' · 当前版':' · 3.x 旧版'}</option>)}</select></label>
-    <label for="download-architecture"><span>2 · 电脑类型</span><select id="download-architecture">{architectures.map(a=><option value={a} selected={a===initialArchitecture} data-versions={groups.filter(g=>g.files.some(f=>f.platform===platform.id && f.architecture===a)).map(g=>g.version).join(' ')} hidden={!downloads.files.some(f=>f.platform===platform.id && f.architecture===a)} disabled={!downloads.files.some(f=>f.platform===platform.id && f.architecture===a)}>{platform.id==='macos' && a==='arm64'?'Apple Silicon（M 系列）':platform.id==='macos' && a==='x64'?'Intel Mac':architectureNames[a]}</option>)}</select></label>
-    <label for="download-provider"><span>3 · 网盘</span><select id="download-provider">{providers.map(([id,name])=><option value={id} selected={id===initialProvider}>{name}</option>)}</select></label>
+<section class="dl card" data-download data-platform={platform.id} data-platform-name={platform.name} data-default-architecture={initialArchitecture} aria-labelledby="choose-download">
+  <div class="dl-head">
+    <div><h2 id="choose-download">选择版本与网盘</h2><p>依次选好三项，每次只显示对应的一个分享码。</p></div>
+    <span class="chip chip-ok"><Icon name="shield" size={15} />原始文件 · 附 SHA-256</span>
   </div>
-  <p class="fine picker-hint">分享按版本整理。进入网盘后，按下方文件名选择你的系统与架构。</p>
-  <div class="selected-download" aria-live="polite" aria-atomic="true">
-    {entries.map(m=><section class="share-choice" data-share-version={m.version} data-provider={m.id} data-scope={m.scope.join(' ')} hidden={m.version!==downloads.version || m.id!==initialProvider}>
-      <div class="qr-column"><img class="selected-qr" src={m.qr} alt={`${m.name} Audacity ${m.version} ${'qrKind' in m?'微信小程序码':'分享二维码'}`} width="220" height="220" /><p class="scan-caption">{'qrKind' in m ? '微信扫一扫' : '扫码打开分享'}</p></div>
-      <div class="share-details"><h3>{m.name} · Audacity {m.version}</h3><p>{m.fileLabel}</p>{'qrKind' in m ? <><p class="extraction-code">平台生成的微信小程序码，已含提取码。</p><p class="fine">请用微信扫一扫；同一手机可保存图片后，用微信扫一扫从相册识别。普通浏览器扫码工具不适用。</p><a class="button secondary" href={m.qr} download={`Audacity-${m.version}-迅雷分享码.png`}>保存迅雷分享码</a></> : <><p class="extraction-code">{m.code ? <>提取码：<strong>{m.code}</strong> <button class="copy" data-copy={m.code}>复制提取码</button></> : '无需提取码'}</p><div class="actions"><a class="button" href={m.url} target="_blank" rel={m.affiliate?'sponsored noopener noreferrer':'noopener noreferrer'}>打开{m.name} ↗</a><button class="copy" data-copy={m.url}>复制分享链接</button></div><a class="share-url" href={m.url} target="_blank" rel="noopener noreferrer">{m.url}</a></>}{m.affiliate && <p class="fine">推广说明：符合平台规则的行为可能为本站产生佣金。Audacity 免费，使用软件不要求购买网盘会员。</p>}</div>
-    </section>)}
+  <div class="dl-body">
+    <div class="dl-steps">
+      <fieldset class="dl-step">
+        <legend><span class="step-no">1</span>版本</legend>
+        <div class="seg">
+          {groups.map((g, i) => <label class="seg-opt"><input class="opt-input" type="radio" name="dl-version" value={g.version} data-label={`${g.version} ${versionNames[g.version]}`} checked={i === 0} /><span class="seg-body"><strong>{g.version}</strong><small>{versionNames[g.version]}</small></span></label>)}
+        </div>
+      </fieldset>
+      <fieldset class="dl-step">
+        <legend><span class="step-no">2</span>电脑类型</legend>
+        <div class="opt-list">
+          {choices.map(c => <label class="opt"><input class="opt-input" type="radio" name="dl-arch" value={c.id} data-label={c.label} data-versions={c.versions.join(' ')} checked={c.id === initialArchitecture} disabled={!c.versions.includes(downloads.version)} /><span class="opt-card"><span class="opt-dot" aria-hidden="true"></span><span class="opt-text"><strong>{c.label}</strong><small>{c.hint}</small>{c.versions.length < groups.length && <em class="opt-limit">仅 {c.versions.join(' / ')}</em>}</span></span></label>)}
+        </div>
+      </fieldset>
+      <fieldset class="dl-step">
+        <legend><span class="step-no">3</span>网盘</legend>
+        <div class="pan-grid">
+          {providers.map(p => <label class="opt pan-opt"><input class="opt-input" type="radio" name="dl-pan" value={p.id} data-label={p.name} checked={p.id === initialProvider} disabled={!initialAvailable.some(m => m.id === p.id)} /><span class="opt-card"><span class="pan-badge" style={`--pan:${providerBadges[p.id]?.color ?? '#2b59ff'}`} aria-hidden="true">{providerBadges[p.id]?.short ?? p.name.slice(0, 1)}</span><span class="opt-text"><strong>{p.name}</strong>{p.limit && <em class="opt-limit">{p.limit}</em>}</span></span></label>)}
+        </div>
+      </fieldset>
+    </div>
+    <div class="dl-result">
+      <p class="dl-summary"><Icon name={platformIcons[platform.id]} size={18} /><span data-summary>{platform.name} · {downloads.version} {versionNames[downloads.version]} · {initialChoice.label} · {providers.find(p => p.id === initialProvider)!.name}</span></p>
+      <div class="share-stage" aria-live="polite" aria-atomic="true">
+        {entries.map(m => <section class="share" data-share-version={m.version} data-provider={m.id} data-scope={m.scope.join(' ')} hidden={m.version !== downloads.version || m.id !== initialProvider}>
+          <div class="share-info">
+            <h3><span class="pan-badge" style={`--pan:${providerBadges[m.id]?.color ?? '#2b59ff'}`} aria-hidden="true">{providerBadges[m.id]?.short ?? m.name.slice(0, 1)}</span>{m.name} · Audacity {m.version}</h3>
+            <p class="share-label">{m.fileLabel}</p>
+            {'qrKind' in m ? <>
+              <p class="share-code"><Icon name="info" size={16} />平台生成的微信小程序码，已含提取码。</p>
+              <p class="fine">请用微信扫一扫；同一手机可保存图片后，用微信扫一扫从相册识别。普通浏览器扫码工具不适用。</p>
+              <div class="share-actions"><a class="btn btn-primary" href={m.qr} download={`Audacity-${m.version}-迅雷分享码.png`}><Icon name="download" size={18} />保存迅雷分享码</a></div>
+            </> : <>
+              <p class="share-code">{m.code ? <><span>提取码</span><strong class="code-value">{m.code}</strong><button class="copy" type="button" data-copy={m.code}><Icon name="copy" size={15} /><span class="copy-label">复制提取码</span></button></> : <><Icon name="check" size={16} />无需提取码</>}</p>
+              <div class="share-actions"><a class="btn btn-primary" href={m.url} target="_blank" rel={m.affiliate ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}>打开{m.name}<Icon name="external" size={17} /></a><button class="btn btn-secondary copy-link" type="button" data-copy={m.url}><Icon name="copy" size={17} /><span class="copy-label">复制分享链接</span></button></div>
+              <a class="share-url" href={m.url} target="_blank" rel="noopener noreferrer">{m.url}</a>
+            </>}
+            {m.affiliate && <p class="fine">推广说明：符合平台规则的行为可能为本站产生佣金。Audacity 免费，使用软件不要求购买网盘会员。</p>}
+          </div>
+          <figure class="share-qr">
+            <img class:list={['qr-img', { 'qr-mini': 'qrKind' in m }]} src={m.qr} alt={`${m.name} Audacity ${m.version} ${'qrKind' in m ? '微信小程序码' : '分享二维码'}`} width="200" height="200" />
+            <figcaption><Icon name={'qrKind' in m ? 'phone' : 'qr'} size={15} />{'qrKind' in m ? '微信扫一扫' : '手机扫码打开分享'}</figcaption>
+          </figure>
+        </section>)}
+      </div>
+      <p class="dl-device-tip"><Icon name="phone" size={16} /><span>电脑上浏览时可用手机扫码；手机上浏览时直接点按钮打开分享。安装包需要在电脑上运行。</span></p>
+    </div>
   </div>
-  <p class="fine">登录、转存、下载速度及客户端要求由网盘决定。文件为原始发布包，未重新打包。{platform.id==='windows'?'百度分享仅覆盖 4.0.1 的 Windows x64。':''}</p>
-  <noscript><p>浏览器未启用 JavaScript，可直接选择以下分享：</p><ul>{entries.filter(m=>!('linkEnabled' in m) || m.linkEnabled!==false).map(m=><li><a href={m.url}>{m.version} · {m.name}</a>{m.code && `（提取码 ${m.code}）`}{m.id==='baidu'?' · 仅 Windows x64':''}</li>)}</ul></noscript>
-</section>
-<section class="download-info file-catalog" aria-labelledby="file-list-heading">
-  <h2 id="file-list-heading">对应文件名与校验值</h2><p class="fine">这里列出当前选择的文件。下载后可用 SHA-256 与官方发布记录核对完整性。</p>
-  {groups.map(g=><div data-file-version={g.version} hidden={g.version!==downloads.version}>
-    {g.files.filter(f=>f.platform===platform.id).map(f=><section class="file-reference" data-file-architecture={f.architecture} hidden={f.architecture!==initialArchitecture}><h3>{f.title}</h3><p class="file-size">{f.format} · {(f.bytes/1024/1024).toFixed(1)} MiB</p><code class="file-name">{f.filename}</code><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code><button class="copy" data-copy={f.sha256}>复制校验值</button></details></section>)}
-    <details class="source-files"><summary>对应源码{g.version===downloads.legacy.version?'、离线手册':''}与许可证</summary><p class="fine">同一版本分享中还提供源码、LICENSE.txt、CHECKSUMS.txt 和来源说明。源码压缩包保留官方原文件。</p>{g.files.filter(f=>f.platform==='shared').map(f=><div class="file-reference"><strong>{f.title} · {f.format}</strong><p><code class="file-name">{f.filename}</code></p><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code></details></div>)}</details>
-  </div>)}
+  <div class="dl-files" aria-labelledby="file-list-heading">
+    <div class="dl-files-head"><h3 id="file-list-heading">进入网盘后，找这个文件</h3><p class="fine">每个分享按版本整理了全部系统的文件。复制文件名可在网盘里搜索；下载后可用 SHA-256 与官方发布记录核对。</p></div>
+    {groups.map(g => <div class="file-group" data-file-version={g.version} hidden={g.version !== downloads.version}>
+      {g.files.filter(f => f.platform === platform.id).map(f => <article class="file-row" data-file-architecture={f.architecture} hidden={f.architecture !== initialArchitecture}>
+        <span class="file-icon" aria-hidden="true">{f.format}</span>
+        <div class="file-main"><h4>{f.title}<span class="file-size">{mib(f.bytes)}</span></h4><p class="file-name"><code>{f.filename}</code><button class="copy copy-mini" type="button" data-copy={f.filename} title="复制文件名"><Icon name="copy" size={14} /><span class="copy-label">复制</span></button></p>
+        <details class="sha"><summary><Icon name="hash" size={15} />SHA-256</summary><div class="sha-body"><code>{f.sha256}</code><button class="copy" type="button" data-copy={f.sha256}><Icon name="copy" size={15} /><span class="copy-label">复制校验值</span></button></div></details></div>
+      </article>)}
+      <details class="source-files"><summary><Icon name="folder" size={17} />同一分享里的源码{g.version === downloads.legacy.version ? '、离线手册' : ''}与许可证</summary><p class="fine">分享中还提供源码、LICENSE.txt、CHECKSUMS.txt 和来源说明。源码压缩包保留官方原文件。</p><ul>{g.files.filter(f => f.platform === 'shared').map(f => <li><span>{f.title} · {f.format} · {mib(f.bytes)}</span><code>{f.filename}</code><details class="sha"><summary><Icon name="hash" size={15} />SHA-256</summary><div class="sha-body"><code>{f.sha256}</code></div></details></li>)}</ul></details>
+    </div>)}
+  </div>
+  <p class="fine dl-foot">登录、转存、下载速度及客户端要求由网盘决定。文件为原始发布包，未重新打包。{platform.id === 'windows' ? '百度分享仅覆盖 4.0.1 的 Windows x64。' : ''}</p>
+  <noscript><div class="dl-noscript"><p>浏览器未启用 JavaScript，可直接选择以下分享：</p><ul>{entries.filter(m => !('linkEnabled' in m) || m.linkEnabled !== false).map(m => <li><a href={m.url}>{m.version} · {m.name}</a>{m.code && `（提取码 ${m.code}）`}{m.id === 'baidu' ? ' · 仅 Windows x64' : ''}</li>)}</ul></div></noscript>
 </section>
 <script>
-  const picker=document.querySelector<HTMLElement>('.download-picker');
-  if(picker){
-    const version=picker.querySelector<HTMLSelectElement>('#download-version')!;
-    const architecture=picker.querySelector<HTMLSelectElement>('#download-architecture')!;
-    const provider=picker.querySelector<HTMLSelectElement>('#download-provider')!;
-    const shares=[...picker.querySelectorAll<HTMLElement>('[data-share-version]')];
-    function update(){
-      for(const option of architecture.options){option.disabled=!option.dataset.versions?.split(' ').includes(version.value);option.hidden=option.disabled;}
-      if(architecture.selectedOptions[0].disabled)architecture.value=[...architecture.options].find(o=>!o.disabled && o.value===picker!.dataset.defaultArchitecture)?.value || [...architecture.options].find(o=>!o.disabled)!.value;
-      const available=shares.filter(s=>s.dataset.shareVersion===version.value && (s.dataset.scope!.split(' ').includes(`${picker!.dataset.platform}:*`)||s.dataset.scope!.split(' ').includes(`${picker!.dataset.platform}:${architecture.value}`)));
-      for(const option of provider.options){option.disabled=!available.some(s=>s.dataset.provider===option.value);option.hidden=option.disabled;}
-      if(provider.selectedOptions[0].disabled)provider.value=available[0].dataset.provider!;
-      for(const share of shares)share.hidden=!available.includes(share)||share.dataset.provider!==provider.value;
-      document.querySelectorAll<HTMLElement>('[data-file-version]').forEach(group=>{group.hidden=group.dataset.fileVersion!==version.value;group.querySelectorAll<HTMLElement>('[data-file-architecture]').forEach(file=>file.hidden=file.dataset.fileArchitecture!==architecture.value);});
-    }
-    [version,architecture,provider].forEach(select=>select.addEventListener('change',update));
+  const root = document.querySelector<HTMLElement>('[data-download]');
+  if (root) {
+    const platform = root.dataset.platform!;
+    const defaultArchitecture = root.dataset.defaultArchitecture!;
+    const radios = (name: string) => [...root.querySelectorAll<HTMLInputElement>(`input[name="${name}"]`)];
+    const versions = radios('dl-version'), architectures = radios('dl-arch'), providers = radios('dl-pan');
+    const shares = [...root.querySelectorAll<HTMLElement>('[data-share-version]')];
+    const fileGroups = [...root.querySelectorAll<HTMLElement>('[data-file-version]')];
+    const summary = root.querySelector<HTMLElement>('[data-summary]');
+    const checked = (list: HTMLInputElement[]) => list.find(input => input.checked && !input.disabled);
+    const inScope = (share: HTMLElement, architecture: string) => {
+      const scope = (share.dataset.scope || '').split(' ');
+      return scope.includes(`${platform}:*`) || scope.includes(`${platform}:${architecture}`);
+    };
+    const update = () => {
+      const version = checked(versions)?.value || versions[0].value;
+      for (const input of architectures) input.disabled = !(input.dataset.versions || '').split(' ').includes(version);
+      if (!checked(architectures)) {
+        const fallback = architectures.find(input => !input.disabled && input.value === defaultArchitecture) || architectures.find(input => !input.disabled);
+        if (fallback) fallback.checked = true;
+      }
+      const architecture = checked(architectures)?.value || '';
+      const available = shares.filter(share => share.dataset.shareVersion === version && inScope(share, architecture));
+      for (const input of providers) input.disabled = !available.some(share => share.dataset.provider === input.value);
+      if (!checked(providers)) {
+        const first = providers.find(input => !input.disabled);
+        if (first) first.checked = true;
+      }
+      const provider = checked(providers)?.value || '';
+      for (const share of shares) share.hidden = !(available.includes(share) && share.dataset.provider === provider);
+      for (const group of fileGroups) {
+        group.hidden = group.dataset.fileVersion !== version;
+        group.querySelectorAll<HTMLElement>('[data-file-architecture]').forEach(file => { file.hidden = file.dataset.fileArchitecture !== architecture; });
+      }
+      if (summary) summary.textContent = [root.dataset.platformName, checked(versions)?.dataset.label, checked(architectures)?.dataset.label, checked(providers)?.dataset.label].filter(Boolean).join(' · ');
+    };
+    root.addEventListener('change', event => { if (event.target instanceof HTMLInputElement && event.target.type === 'radio') update(); });
     update();
   }
 </script>

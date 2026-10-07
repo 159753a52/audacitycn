@@ -1,0 +1,52 @@
+---
+// 首页装饰插图：通用的音频编辑窗口，不是 Audacity 截图。
+import Icon from './Icon.astro';
+interface Props { current: string; legacy: string; }
+const { current, legacy } = Astro.props;
+function seeded(seed: number) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function makeBars(count: number, seed: number, envelope: (t: number) => number) {
+  const rnd = seeded(seed);
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / (count - 1);
+    return Math.max(0.06, Math.min(1, envelope(t) * (0.45 + 0.55 * rnd())));
+  });
+}
+const voice = makeBars(112, 7, t => 0.1 + 0.9 * Math.pow(Math.max(0, Math.sin(t * Math.PI * 4.2 + 0.6)), 0.7) * (0.75 + 0.25 * Math.sin(t * 23)));
+const music = makeBars(112, 19, t => 0.35 + 0.3 * Math.sin(t * Math.PI * 2) ** 2 + 0.15 * Math.sin(t * 40));
+const left = 92, step = 4.4, barWidth = 2.6, selStart = 252, selEnd = 384, playhead = 318;
+const toRects = (values: number[], center: number, half: number) => values.map((v, i) => {
+  const x = left + i * step, h = Math.max(3, v * half * 2);
+  return { x: x.toFixed(1), y: (center - h / 2).toFixed(1), h: h.toFixed(1), sel: x >= selStart && x <= selEnd };
+});
+const voiceRects = toRects(voice, 190, 50);
+const musicRects = toRects(music, 314, 32);
+const ticks = Array.from({ length: 12 }, (_, i) => left + i * 44);
+---
+<div class="hero-art" aria-hidden="true">
+  <div class="art-glow"></div>
+  <svg class="art-window" viewBox="0 0 600 392" width="600" height="392" focusable="false">
+    <defs>
+      <linearGradient id="meter" x1="0" x2="1"><stop offset="0" stop-color="#22c55e" /><stop offset=".7" stop-color="#eab308" /><stop offset="1" stop-color="#ef4444" /></linearGradient>
+    </defs>
+    <rect x=".5" y=".5" width="599" height="391" rx="18" class="art-frame" />
+    <path d="M18.5 .5h563a18 18 0 0 1 18 18V44H.5V18.5a18 18 0 0 1 18-18Z" class="art-titlebar" />
+    <circle cx="26" cy="22" r="5.5" fill="#ff5f57" /><circle cx="44" cy="22" r="5.5" fill="#febc2e" /><circle cx="62" cy="22" r="5.5" fill="#28c840" />
+    <text x="300" y="27" text-anchor="middle" class="art-title">采访录音 · 未保存</text>
+    <circle cx="34" cy="74" r="15" class="art-btn" /><circle cx="34" cy="74" r="6" fill="#ff4d5e" />
+    <circle cx="72" cy="74" r="15" class="art-btn" /><path d="M68 67.5v13l10.5-6.5Z" fill="#e2e8f0" />
+    <circle cx="110" cy="74" r="15" class="art-btn" /><rect x="104.5" y="68.5" width="11" height="11" rx="2" fill="#e2e8f0" />
+    <rect x="142" y="70" width="196" height="8" rx="4" class="art-meter-bg" /><rect x="142" y="70" width="138" height="8" rx="4" fill="url(#meter)" />
+    <rect x="462" y="60" width="118" height="28" rx="8" class="art-btn" /><text x="521" y="79" text-anchor="middle" class="art-time">00:00:07.4</text>
+    <line x1="16" y1="104" x2="584" y2="104" class="art-rule" />
+    {ticks.map((x, i) => <g><line x1={x} y1="106" x2={x} y2={i % 2 ? 112 : 118} class="art-tick" />{i % 2 === 0 && <text x={x + 4} y="118" class="art-ticklabel">{`0:${String(i * 2.5).padStart(2, '0')}`}</text>}</g>)}
+    <rect x={selStart} y="126" width={selEnd - selStart} height="246" class="art-selection" />
+    <rect x="16" y="132" width="66" height="116" rx="10" class="art-trackhead" /><text x="26" y="156" class="art-label">人声</text><text x="26" y="174" class="art-sub">单声道</text>
+    <rect x="16" y="262" width="66" height="104" rx="10" class="art-trackhead" /><text x="26" y="286" class="art-label">配乐</text><text x="26" y="304" class="art-sub">立体声</text>
+    <rect x="88" y="132" width="496" height="116" rx="10" class="art-lane" /><rect x="88" y="262" width="496" height="104" rx="10" class="art-lane" />
+    {voiceRects.map(r => <rect x={r.x} y={r.y} width={barWidth} height={r.h} rx="1.3" class={r.sel ? 'bar-voice is-sel' : 'bar-voice'} />)}
+    {musicRects.map(r => <rect x={r.x} y={r.y} width={barWidth} height={r.h} rx="1.3" class={r.sel ? 'bar-music is-sel' : 'bar-music'} />)}
+    <line x1={playhead} y1="108" x2={playhead} y2="372" class="art-playhead" /><path d={`M${playhead - 6} 106h12l-6 8Z`} fill="#fff" />
+  </svg>
+  <div class="art-chip art-chip-top"><Icon name="tag" size={16} />{current} 当前版 · {legacy} 旧版</div>
+  <div class="art-chip art-chip-bottom"><Icon name="shield" size={16} />SHA-256 与官方校验记录一致</div>
+</div>

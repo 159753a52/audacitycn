@@ -34,4 +34,11 @@ for(const file of htmls){
  if(!rel.includes('404'))assert.ok(sitemap.includes(`<loc>${canonical}</loc>`),`${rel}: 缺少 sitemap`);
 }
 assert.ok(!sitemap.includes('404')); assert.ok(existsSync(join(dist,'robots.txt')));
+for(const platform of ['windows','macos','linux']){
+ const html=readFileSync(join(dist,'download',platform,'index.html'),'utf8');
+ const shares=[...html.matchAll(/<section class="share"[^>]*>/g)].map(m=>m[0]);
+ assert.ok(shares.length>=3,`${platform}: 分享入口缺失`);
+ assert.equal(shares.filter(tag=>!/\shidden[\s>=]/.test(tag)).length,1,`${platform}: 初始应只显示一个分享码`);
+ assert.equal(html.includes('pan.baidu.com'),platform==='windows',`${platform}: 百度分享只应出现在 Windows 页`);
+}
 console.log(`PASS: ${htmls.length} HTML pages; unique titles/descriptions, exact canonical, h1, anchors, JSON-LD, local links, sitemap and downloads verified.`);
