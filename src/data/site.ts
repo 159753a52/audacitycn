@@ -1,7 +1,7 @@
 export const site = {
   name: 'Audacity 中文指南',
   url: 'https://audacitycn.com',
-  description: 'Audacity 中文下载指引与使用教程。核对官方来源，学习录音、剪辑、降噪和音频导出，让第一段声音顺利完成。',
+  description: 'Audacity 中文下载、操作说明与问题排查。版本选择、麦克风录音、Windows 内录、降噪和 MP3 导出。',
   indexNowKey: 'f087dab7e1c4456ca9b12048ed335aa2',
   contact: 'https://github.com/159753a52/audacitycn/issues',
 };
