@@ -1,14 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import DownloadPanel from '../components/DownloadPanel.astro';
 import downloads from '../data/downloads.json';
-const availableFiles=downloads.files.filter(f=>f.id!=='windows-arm64');
-const softwareSchema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'Audacity',softwareVersion:downloads.version,operatingSystem:'Windows 10, Windows 11',applicationCategory:'MultimediaApplication',url:'https://www.audacityteam.org/',downloadUrl:'https://audacitycn.com/download/',isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
+import { platforms } from '../data/platforms';
 ---
-<Base title={`Audacity ${downloads.version} 网盘下载：安装版与便携版`} description="通过夸克、百度、UC 网盘下载 Audacity 4.0.1 Windows x64 原始安装版和便携版。提供分享二维码、提取码、原始文件名、SHA-256 与安装说明。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
-<script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
-<div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 下载</nav><h1>Audacity {downloads.version} 网盘下载</h1><p class="lead">选择下方网盘，扫码或打开分享链接获取原始文件。网盘中包含 Windows x64 安装版、便携版、对应源码、许可证与校验文件。</p></header>
-<div class="download-summary"><strong>{downloads.version}</strong><span>免费开源</span><span>来源核对：<time datetime={downloads.verified}>{downloads.verified}</time></span><span>原始发布文件，未重新打包</span></div>
-<DownloadPanel />
-<section class="download-info"><h2>文件名与校验值</h2><p>普通 Intel / AMD 电脑使用 Windows x64。下载后按文件名核对版本；校验值用于检查从网盘保存的文件是否完整。</p>{availableFiles.map(f=><section class="file-reference"><h3>{f.title}</h3><p>{f.description}</p><code class="file-name">{new URL(f.url).pathname.split('/').pop()}</code><details class="checksum"><summary>查看 SHA-256</summary><code>{f.sha256}</code><button class="copy" data-copy={f.sha256}>复制校验值</button></details></section>)}<h2>安装版和便携版有什么区别？</h2><p>MSI 按安装向导部署。7Z 需要完整解压后运行，不要只把可执行文件单独拖出来。工作中的工程先保存在本机磁盘，完成后再备份。</p><h2>下载之后做什么？</h2><ul><li><a href="/guides/install/">按安装教程检查架构和首次启动。</a></li><li><a href="/guides/record-voice/">用 10 秒录音检查麦克风和电平。</a></li><li><a href="/guides/export-audio/">保存工程，再导出 MP3 或 WAV。</a></li></ul><p class="fine">文件来源：Audacity 项目的官方发布记录。本站提供网盘分享入口。</p></section>
-</div></Base>
+<Base title="Audacity 中文下载：Windows、Mac、Linux 网盘与版本选择" description="按系统选择 Audacity 原始文件下载：Windows、macOS、Linux。整理当前 4.0.1 与 3.x 旧版 3.7.9，分架构列出文件名、SHA-256、网盘分享与二维码。" breadcrumbs={[{name:'下载',path:'/download/'}]}>
+  <div class="container"><header class="page-heading"><nav class="breadcrumb" aria-label="当前位置"><a href="/">首页</a> / 下载</nav><h1>Audacity 下载中心</h1><p class="lead">先选电脑系统，再选版本和网盘。每次只显示你选中的分享二维码；文件名和校验值放在同一页。</p></header>
+    <div class="download-summary"><strong>{downloads.version}</strong><span>当前版</span><span>3.x 旧版：{downloads.legacy.version}</span><span>来源核对：<time datetime={downloads.verified}>{downloads.verified}</time></span></div>
+    <section class="platform-list" aria-labelledby="choose-system"><h2 id="choose-system">你使用哪个系统？</h2>{platforms.map(p=><a class="platform-row" href={`/download/${p.id}/`}><div><h3>{p.name}</h3><p>{p.summary}</p></div><span>选择版本与网盘 <span aria-hidden="true">→</span></span></a>)}</section>
+    <section class="download-info"><h2>4.x 和 3.x 怎么选？</h2><p>初次使用可从 4.0.1 开始。需要 32 位 Windows 程序，或继续使用 3.x 的工程与插件工作流，可选择 3.7.9。4.x 保存 .aup4 工程，3.x 保存 .aup3；升级前保留原工程副本，不要直接覆盖唯一备份。</p><h2>网盘里面有哪些文件？</h2><p>夸克、UC、迅雷按版本提供 Windows、Mac 和 Linux 的原始发布包，并保留对应源码、许可证、CHECKSUMS.txt 与来源说明。3.7.9 另有离线手册。百度目前只提供 4.0.1 Windows x64。</p><p>本站是独立中文资料站，与软件项目无隶属关系。Audacity 免费开源；网盘的登录、转存、速度和会员由相应平台决定。</p><h2>下载后先看这些</h2><ul><li><a href="/guides/install/">Windows 安装与中文界面设置</a></li><li><a href="/guides/record-voice/">录一段声音，检查设备与电平</a></li><li><a href="/guides/export-audio/">工程保存与 MP3 / WAV 导出</a></li></ul></section>
+  </div>
+</Base>
