@@ -2,6 +2,7 @@
 import QRCode from 'qrcode';
 import Icon from './Icon.astro';
 import downloads from '../data/downloads.json';
+import { site } from '../data/site';
 import { archChoices, platformIcons, providerBadges } from '../data/ui';
 import { validateDownloads, availableMirrors } from '../../scripts/config.mjs';
 validateDownloads(downloads);
@@ -26,12 +27,16 @@ const providers = [...new Map(entries.map(m => [m.id, m.name])).entries()].map((
 const initialProvider = initialAvailable[0].id;
 const mib = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
 const initialChoice = choices.find(c => c.id === initialArchitecture)!;
+const downloadFeedback = new URL(`${site.contact}/new`);
+downloadFeedback.searchParams.set('title', `下载问题：${platform.name}`);
+downloadFeedback.searchParams.set('body', `页面：${site.url}/download/${platform.id}/\n所选版本、电脑类型、网盘：\n问题：\n\n请勿填写账户、密码或私人文件。`);
 ---
 <section class="dl card" data-download data-platform={platform.id} data-platform-name={platform.name} data-default-architecture={initialArchitecture} aria-labelledby="choose-download">
   <div class="dl-head">
     <div><h2 id="choose-download">选择版本与网盘</h2><p>依次选好三项，每次只显示对应的一个分享码。</p></div>
     <span class="chip chip-ok"><Icon name="shield" size={15} />官方原始文件 · 未重新打包</span>
   </div>
+  <p class="download-terms">Audacity 免费开源，无需激活码或付费汉化包。网盘可能要求登录、转存或客户端；会员服务由平台提供，购买会员不是获得 Audacity 使用权的条件。<a href="/privacy/">费用与推广说明</a></p>
   <div class="dl-body">
     <div class="dl-steps">
       <fieldset class="dl-step">
@@ -77,12 +82,13 @@ const initialChoice = choices.find(c => c.id === initialArchitecture)!;
           </figure>
         </section>)}
       </div>
-      <p class="dl-device-tip"><Icon name="phone" size={16} /><span>电脑上浏览时可用手机扫码；手机上浏览时直接点按钮打开分享。安装包需要在电脑上运行。</span></p>
+      <p class="dl-device-tip"><Icon name="phone" size={16} /><span>普通分享可打开链接或手机扫码；迅雷需用微信识别上方小程序码。安装包需要在电脑上运行。</span></p>
     </div>
   </div>
   <div class="dl-files" aria-labelledby="file-list-heading">
-    <div class="dl-files-head"><h3 id="file-list-heading">进入网盘后，找这个文件</h3><p class="fine">每个分享按版本整理了全部系统的文件。复制文件名，可以在网盘里直接搜索。</p></div>
+    <div class="dl-files-head"><h3 id="file-list-heading">进入网盘后，找这个文件</h3><p class="fine">下方只列所选版本与电脑类型的文件。夸克、UC、迅雷按版本整理多个系统的文件；百度仅提供 4.0.1 Windows x64。复制文件名后可在网盘中搜索。</p></div>
     {groups.map(g => <div class="file-group" data-file-version={g.version} hidden={g.version !== downloads.version}>
+      <p class="fine release-evidence">文件资料核对：<time datetime={g.verified}>{g.verified}</time> · <a href={g.release} target="_blank" rel="noopener noreferrer">{g.version} 官方发布记录</a> · <a href="/about/#verification">核对范围</a></p>
       {g.files.filter(f => f.platform === platform.id).map(f => <article class="file-row" data-file-architecture={f.architecture} hidden={f.architecture !== initialArchitecture}>
         <span class="file-icon" aria-hidden="true">{f.format}</span>
         <div class="file-main"><h4>{f.title}<span class="file-size">{mib(f.bytes)}</span></h4><p class="file-name"><code>{f.filename}</code><button class="copy copy-mini" type="button" data-copy={f.filename} title="复制文件名"><Icon name="copy" size={14} /><span class="copy-label">复制</span></button></p></div>
@@ -90,7 +96,7 @@ const initialChoice = choices.find(c => c.id === initialArchitecture)!;
       <details class="source-files"><summary><Icon name="folder" size={17} />同一分享里的源码{g.version === downloads.legacy.version ? '、离线手册' : ''}与许可证</summary><p class="fine">分享中还提供源码、许可证（LICENSE.txt）和来源说明。源码压缩包保留官方原文件。</p><ul>{g.files.filter(f => f.platform === 'shared').map(f => <li><span>{f.title} · {f.format} · {mib(f.bytes)}</span><code>{f.filename}</code></li>)}</ul></details>
     </div>)}
   </div>
-  <p class="fine dl-foot">登录、转存、下载速度及客户端要求由网盘决定。文件为原始发布包，未重新打包。{platform.id === 'windows' ? '百度分享仅覆盖 4.0.1 的 Windows x64。' : ''}</p>
+  <p class="fine dl-foot">分享失效、提取码不符或缺少文件时，可切换上方其他网盘，或<a href={downloadFeedback.href} target="_blank" rel="noopener noreferrer">反馈此下载页的问题</a>。反馈需 GitHub 账号，内容会公开。文件资料的核对日期不代表分享链接会永久有效。</p>
   <noscript><div class="dl-noscript"><p>浏览器未启用 JavaScript，可直接选择以下分享：</p><ul>{entries.filter(m => !('linkEnabled' in m) || m.linkEnabled !== false).map(m => <li><a href={m.url}>{m.version} · {m.name}</a>{m.code && `（提取码 ${m.code}）`}{m.id === 'baidu' ? ' · 仅 Windows x64' : ''}</li>)}</ul></div></noscript>
 </section>
 <script>
