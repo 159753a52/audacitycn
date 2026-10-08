@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader.astro';
 import { site } from '../data/site';
 import { guides } from '../data/guides';
 const changes = [
+  ['2026-10-07', '六篇教程补充 4.0.1 中文菜单对照，按官方便携包语言文件核对；增加录音波形示意，修正 MP3 声道与文件大小的说明，反馈入口自动带入教程地址。'],
   ['2026-10-07', '新增《新手入门》和《设置中文界面》两篇教程，常见问题补充手机版、设置中文等条目。'],
   ['2026-10-07', '全站改版：下载页按系统、版本和电脑类型分类，每次只显示所选的一个下载入口。'],
   ['2026-10-07', '上线首批 8 篇教程、常见问题和下载中心，内容按 Audacity 4.x / 3.x 官方手册核对。'],
@@ -16,12 +17,14 @@ const changes = [
     <p>Audacity 是免费开源的录音与音频剪辑软件。本站是独立的中文资料站，与 Audacity 项目及 Muse Group 没有隶属关系；软件的开发、发布和商标归各自权利人所有。软件官网是 <a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">audacityteam.org</a>。</p>
     <h2>谁在维护</h2>
     <p>网站内容和下载配置公开在 <a href={site.repo} target="_blank" rel="noopener noreferrer">GitHub 仓库</a>，每一次修改都留有记录，可以随时查看。文章统一以“Audacity 中文指南”署名。</p>
-    <h2>教程怎么写、怎么核对</h2>
+    <h2 id="editorial">教程怎么写、怎么核对</h2>
     <ul>
       <li>以对应版本的官方资料为准：4.x 参考 <a href="https://www.audacityteam.org/manual/" target="_blank" rel="noopener noreferrer">官方 4.x 手册</a>，3.x 参考 <a href="https://manual.audacityteam.org/" target="_blank" rel="noopener noreferrer">官方 3.x 手册</a>，排查类问题同时参考官方支持文档。</li>
       <li>每篇教程标注适用版本和内容核对日期，文末列出所依据的资料链接。目前共 {guides.length} 篇。</li>
       <li>3.x 和 4.x 的菜单位置、工程格式（.aup3 / .aup4）和快捷键不同，正文分开说明，不把旧版步骤套到新版上。</li>
       <li>本站没有在所有声卡和设备上逐一实测，不写“全部设备亲测”之类的说法。设备表现不同的地方，会写明要检查的设置项。</li>
+      <li>标注“4.0.1 中文菜单对照”的表格，逐项对照 Windows x64 官方便携包中的简体中文语言文件；这项核对只确认译名，不代表完成了录音、设备兼容性或所有系统的实测。语言包更新可能改变译名。</li>
+      <li>录音教程的波形图为本站绘制的合成信号示意，图注明示用途；不能用示意图代替实际录音结果。</li>
       <li>官方资料更新或发现错误时，修改正文并更新核对日期。</li>
     </ul>
     <h2>下载文件从哪里来</h2>

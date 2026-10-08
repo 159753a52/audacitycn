@@ -1,0 +1,33 @@
+---
+const examples = [
+  { title: '输入太小', gain: 0.09, color: '#697386', text: '先确认麦克风选对，再检查距离和输入增益。完全没有波形时，还要查权限与连接。' },
+  { title: '留有余量', gain: 0.6, color: '#2455d6', text: '波峰与上下边界留有距离。仍需戴耳机回放，检查回声、底噪和是否录错设备。' },
+  { title: '输入过大，削波', gain: 1.65, color: '#be3541', text: '波峰被截成平顶。降低输入增益后重录；只调低播放音量，平顶仍然存在。' },
+];
+const points = (gain: number) => Array.from({ length: 321 }, (_, i) => {
+  const value = Math.sin(i / 320 * Math.PI * 12) * gain;
+  return `${i},${50 - Math.max(-1, Math.min(1, value)) * 40}`;
+}).join(' ');
+---
+<figure class="recording-levels">
+  <figcaption><strong>同一段信号，输入大小不同会怎样</strong><p>本站绘制的波形示意，用合成正弦信号说明幅度和削波。实际人声更不规则，请结合电平表与试听判断。</p></figcaption>
+  <div class="level-examples">
+    {examples.map(example => <div>
+      <h3>{example.title}</h3>
+      <svg viewBox="0 0 320 100" role="img" aria-label={`${example.title}的波形示意`}>
+        <path d="M0 10H320 M0 90H320" stroke="#c8cdd7" stroke-dasharray="4 4" />
+        <path d="M0 50H320" stroke="#c8cdd7" />
+        <polyline points={points(example.gain)} fill="none" stroke={example.color} stroke-width="2" />
+      </svg>
+      <p>{example.text}</p>
+    </div>)}
+  </div>
+</figure>
+<style>
+  .recording-levels { margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+  figcaption p, .level-examples p { font-size: 14px; line-height: 1.8; margin: 8px 0 0; }
+  .level-examples { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
+  .level-examples h3 { font-size: 15px; margin: 0 0 8px; }
+  svg { width: 100%; height: auto; display: block; }
+  @media (max-width: 600px) { .level-examples { grid-template-columns: 1fr; } }
+</style>

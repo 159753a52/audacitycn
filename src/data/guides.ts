@@ -13,6 +13,51 @@ export const guides: Guide[] = [
     related: ['record-voice', 'edit-audio', 'export-audio'],
     sections: [
       {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "Add track",
+              "添加音轨"
+            ],
+            [
+              "Mono",
+              "单声道"
+            ],
+            [
+              "Record",
+              "录制"
+            ],
+            [
+              "Effects",
+              "效果器"
+            ],
+            [
+              "Save to computer",
+              "保存到计算机"
+            ],
+            [
+              "Export audio",
+              "导出音频"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
+      {
         title: '一次完整流程',
         table: { headers: ['步骤', '怎么做', '细看'], rows: [
           ['1. 建轨道', 'Add track → Mono；一支麦克风录人声用单声道', '麦克风录音设置'],
@@ -39,8 +84,8 @@ export const guides: Guide[] = [
       {
         title: '看波形判断录得好不好',
         table: { headers: ['波形样子', '说明', '怎么办'], rows: [
-          ['顶满整条轨道的实心块', '音量过大，波峰被削平（削波）', '削波无法修复，调低输入音量后重录；View → Show clipping in waveform 会把削波处标红'],
-          ['几乎是一条直线', '音量太小', '调高输入或靠近麦克风后重录；没法重录时可用 Amplify 放大，但底噪会一起变大'],
+          ['波峰被削平，伴随削波提示', '音量过大，波峰被削平（削波）', '调低输入音量后重录最稳妥，降低回放音量不能恢复丢失的波峰；View → Show clipping in waveform 会把削波处标红'],
+          ['几乎是一条直线', '可能音量太小，也可能没有录到输入', '调高输入或靠近麦克风后重录；没法重录时可用 Amplify 放大，但底噪会一起变大'],
           ['起伏清楚，峰值离顶部还有距离', '音量合适', '可以开始剪辑'],
         ] },
         links: [['录音没声音怎么办', '/guides/no-sound/']],
@@ -73,7 +118,7 @@ export const guides: Guide[] = [
           '开始录音后尽早按 Ctrl + S。第一次保存选择 Save to computer，填写名称和位置，得到 .aup4 工程文件；之后再按 Ctrl + S 都存到同一个文件。',
           '.aup4 只能用 Audacity 打开，里面保留轨道、片段、剪辑和实时效果，以后还能接着改。保存过的工程会出现在 Home 页，方便再次打开。',
           '要发给别人或上传，用 File → Export audio（Ctrl + Shift + E）。Type 选 Export full project audio 导出整个工程，也可以只导出选区或循环区域。',
-          '没有特别要求时选 MP3：人声 128 kbps、音乐 256 kbps 是稳妥的起点。单声道录音按单声道导出，选立体声只会得到两个相同的声道，文件大一倍。',
+          '没有特别要求时选 MP3：人声 128 kbps、音乐 256 kbps 是稳妥的起点。单支麦克风的人声通常按单声道导出即可。MP3 文件大小主要由码率和时长决定；固定码率相同时，选立体声不会直接让文件翻倍。',
         ],
         note: 'Save to cloud 会把工程存到 audio.com，需要账号和网络；只想存在自己电脑上时选 Save to computer。',
         links: [['导出 MP3 和 WAV', '/guides/export-audio/']],
@@ -100,6 +145,43 @@ export const guides: Guide[] = [
     answer: 'Windows、Linux 打开 Edit → Preferences，macOS 从左上角的应用菜单打开偏好设置。4.x 在 General 页的 Language 选简体中文；3.x 在 Interface 页的 Language 选简体中文后点 OK，个别文字要重启后才切换。',
     related: ['getting-started', 'install', 'record-voice'],
     sections: [
+      {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "Edit",
+              "编辑"
+            ],
+            [
+              "Preferences",
+              "首选项"
+            ],
+            [
+              "General",
+              "通用"
+            ],
+            [
+              "Language",
+              "语言"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
       {
         title: '两个版本的位置对照',
         table: { headers: ['版本', '打开偏好设置', '语言选项', '切换后'], rows: [
@@ -259,6 +341,51 @@ export const guides: Guide[] = [
     "applies": "Audacity 4.x · 麦克风 / USB 声卡",
     "sections": [
       {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "Audio setup",
+              "音频设置"
+            ],
+            [
+              "Recording device",
+              "录制设备"
+            ],
+            [
+              "Playback device",
+              "播放设备"
+            ],
+            [
+              "Recording channels",
+              "录制声道"
+            ],
+            [
+              "Mono",
+              "单声道"
+            ],
+            [
+              "Rescan audio devices",
+              "重新扫描音频设备"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
+      {
         "title": "录音设置对照",
         "table": {
           "headers": [
@@ -346,6 +473,51 @@ export const guides: Guide[] = [
     "intro": "Windows WASAPI 与回环（loopback）的内录设置顺序，附无声、录音报错和切换耳机排查。",
     "applies": "Windows 10 / 11 · Audacity 3.x / 4.x",
     "sections": [
+      {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "Audio setup",
+              "音频设置"
+            ],
+            [
+              "Host",
+              "主机"
+            ],
+            [
+              "Recording device",
+              "录制设备"
+            ],
+            [
+              "Recording channels",
+              "录制声道"
+            ],
+            [
+              "Stereo",
+              "立体声"
+            ],
+            [
+              "Rescan audio devices",
+              "重新扫描音频设备"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
       {
         "title": "先确定这次要录哪一路",
         "table": {
@@ -572,6 +744,55 @@ export const guides: Guide[] = [
     "applies": "Audacity 4.x；标注 3.x 输出名称差异",
     "sections": [
       {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "Effect",
+              "效果器"
+            ],
+            [
+              "Noise removal and repair",
+              "噪音消除和修复"
+            ],
+            [
+              "Noise reduction",
+              "噪声抑制"
+            ],
+            [
+              "Get noise profile",
+              "获取噪声配置文件"
+            ],
+            [
+              "Sensitivity",
+              "灵敏度"
+            ],
+            [
+              "Frequency smoothing",
+              "频率平滑"
+            ],
+            [
+              "Noise only",
+              "仅噪音"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
+      {
         "title": "先判断适不适合降噪",
         "table": {
           "headers": [
@@ -688,6 +909,47 @@ export const guides: Guide[] = [
     "intro": "完整工程与选区导出、声道和码率选择，以及 10 分钟音频的文件大小计算。",
     "applies": "Audacity 4.x",
     "sections": [
+      {
+        "title": "4.0.1 中文菜单对照",
+        "paragraphs": [
+          "教程中的英文菜单可按下表在简体中文界面查找。这里只核对菜单名称；操作顺序和适用条件见后文。"
+        ],
+        "table": {
+          "headers": [
+            "教程中的英文",
+            "简体中文界面"
+          ],
+          "rows": [
+            [
+              "File",
+              "文件"
+            ],
+            [
+              "Export audio",
+              "导出音频"
+            ],
+            [
+              "Save to computer",
+              "保存到计算机"
+            ],
+            [
+              "Mono",
+              "单声道"
+            ],
+            [
+              "Stereo",
+              "立体声"
+            ]
+          ]
+        },
+        "note": "核对版本：Audacity 4.0.1 Windows x64。名称取自官方便携包自带的 locale/audacity_zh_CN.qm（2026-10-07 核对），省略快捷键字母和省略号。更新语言包后译名可能变化；此表不用于判断 3.x 的菜单名称。",
+        "links": [
+          [
+            "官方 4.0.1 发布记录",
+            "https://github.com/audacity/audacity/releases/tag/Audacity-4.0.1"
+          ]
+        ]
+      },
       {
         "title": "工程与成品对照",
         "table": {

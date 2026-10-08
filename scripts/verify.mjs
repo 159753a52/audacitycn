@@ -32,7 +32,17 @@ for(const file of htmls){
  }
  const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
  for(const [,anchor] of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.has(anchor), `${rel}: 页内目录指向不存在的 ${anchor}`);
- for(const [,json] of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) JSON.parse(json);
+ for(const [,json] of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
+   const parsed = JSON.parse(json);
+   for (const schema of (Array.isArray(parsed) ? parsed : [parsed])) {
+     if (schema['@type'] !== 'Article') continue;
+     assert.ok(schema.citation?.length > 0, `${rel}: 教程缺少资料来源`);
+     for (const citation of schema.citation) assert.ok(html.includes(`href="${citation.url}"`), `${rel}: 结构化数据引用必须在正文可见`);
+     const feedback = html.match(/href="(https:\/\/github\.com\/[^" ]+\/issues\/new\?[^" ]+)"/)?.[1];
+     assert.ok(feedback, `${rel}: 缺少本页纠错入口`);
+     assert.ok(new URL(feedback.replaceAll('&amp;', '&')).searchParams.get('body')?.includes(canonical), `${rel}: 纠错入口应带入当前页面`);
+   }
+ }
  if(!rel.includes('404'))assert.ok(sitemap.includes(`<loc>${canonical}</loc>`),`${rel}: 缺少 sitemap`);
 }
 assert.ok(!sitemap.includes('404')); assert.ok(existsSync(join(dist,'robots.txt')));
