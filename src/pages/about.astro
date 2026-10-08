@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader.astro';
 import { site } from '../data/site';
 import { guides } from '../data/guides';
 const changes = [
+  ['2026-10-07', '明确维护账号、内容核对范围和纠错流程；修正百度分享范围与迅雷扫码说明，剪辑教程新增删除和静音的对照练习。'],
   ['2026-10-07', '六篇教程补充 4.0.1 中文菜单对照，按官方便携包语言文件核对；增加录音波形示意，修正 MP3 声道与文件大小的说明，反馈入口自动带入教程地址。'],
   ['2026-10-07', '新增《新手入门》和《设置中文界面》两篇教程，常见问题补充手机版、设置中文等条目。'],
   ['2026-10-07', '全站改版：下载页按系统、版本和电脑类型分类，每次只显示所选的一个下载入口。'],
@@ -15,8 +16,9 @@ const changes = [
   <div class="container prose-wrap"><div class="prose">
     <h2>本站是什么</h2>
     <p>Audacity 是免费开源的录音与音频剪辑软件。本站是独立的中文资料站，与 Audacity 项目及 Muse Group 没有隶属关系；软件的开发、发布和商标归各自权利人所有。软件官网是 <a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">audacityteam.org</a>。</p>
-    <h2>谁在维护</h2>
-    <p>网站内容和下载配置公开在 <a href={site.repo} target="_blank" rel="noopener noreferrer">GitHub 仓库</a>，每一次修改都留有记录，可以随时查看。文章统一以“Audacity 中文指南”署名。</p>
+    <h2 id="maintainer">谁在维护</h2>
+    <p>本站由 GitHub 账号 <a href={site.maintainer.url} target="_blank" rel="noopener noreferrer">{site.maintainer.name}</a> 维护，负责教程整理、下载配置和页面纠错，文章统一以“Audacity 中文指南”署名。网站内容公开在 <a href={site.repo} target="_blank" rel="noopener noreferrer">GitHub 仓库</a>，可查看具体修改和历史版本。</p>
+    <p>本站主要整理中文用户在安装、录音、剪辑和导出时遇到的问题。菜单、文件格式和操作差异按版本说明，方便读者对照自己的界面完成操作。</p>
     <h2 id="editorial">教程怎么写、怎么核对</h2>
     <ul>
       <li>以对应版本的官方资料为准：4.x 参考 <a href="https://www.audacityteam.org/manual/" target="_blank" rel="noopener noreferrer">官方 4.x 手册</a>，3.x 参考 <a href="https://manual.audacityteam.org/" target="_blank" rel="noopener noreferrer">官方 3.x 手册</a>，排查类问题同时参考官方支持文档。</li>
@@ -27,6 +29,13 @@ const changes = [
       <li>录音教程的波形图为本站绘制的合成信号示意，图注明示用途；不能用示意图代替实际录音结果。</li>
       <li>官方资料更新或发现错误时，修改正文并更新核对日期。</li>
     </ul>
+    <h2 id="verification">“核对”具体指什么</h2>
+    <ul>
+      <li>教程步骤：对照文章列出的官方手册和支持资料；标注 3.x、4.x 的区别。菜单名称的核对单独注明版本和语言文件。</li>
+      <li>下载文件：对照对应版本的官方发布包，记录文件名、版本、架构和大小。这个记录不代表在所有系统、声卡和插件组合上完成了运行测试。</li>
+      <li>计算与示意：文件大小按正文公式计算，波形图使用合成信号说明原理；实际结果可能因素材、参数和设备而异。</li>
+      <li>实际操作测试：只有记录了软件版本、操作系统、步骤与结果的内容，才会标为实测。浏览器页面测试只说明网站功能，不作为软件录音效果的证据。</li>
+    </ul>
     <h2>下载文件从哪里来</h2>
     <p>下载页提供的安装包取自 Audacity 官方发布记录，保留原始文件名，不重新打包，也不捆绑其他软件；同一版本还附有对应源码和许可证。下载页按系统、版本和电脑类型分类，获取方式在下载页说明。</p>
     <h2>推广与费用</h2>
@@ -35,6 +44,7 @@ const changes = [
     <ul class="change-log">{changes.map(([date, text]) => <li><time datetime={date}>{date}</time><span>{text}</span></li>)}</ul>
     <h2>发现错误怎么反馈</h2>
     <p>通过 <a href={site.contact} target="_blank" rel="noopener noreferrer">反馈入口</a>提供页面地址、软件完整版本、系统与错误原文。菜单变化、失效链接和遗漏的步骤都可以反馈；公开信息中请去掉密码、账户资料、私人路径和不便公开的录音。</p>
+    <p>反馈入口使用 GitHub Issues，需要 GitHub 账号，提交内容会公开。收到问题后先按所报版本核对；确认错误则修改对应页面。影响操作结果的修正会列入更新记录，完整差异保留在仓库中。仅排版调整不刷新教程的内容核对日期。</p>
     <h2>官方资料入口</h2>
     <ul><li><a href="https://www.audacityteam.org/" target="_blank" rel="noopener noreferrer">Audacity 软件官网</a></li><li><a href="https://www.audacityteam.org/manual/getting-started/" target="_blank" rel="noopener noreferrer">当前版本官方手册</a></li><li><a href="https://manual.audacityteam.org/" target="_blank" rel="noopener noreferrer">3.x 官方手册</a></li><li><a href="https://www.audacityteam.org/faq/" target="_blank" rel="noopener noreferrer">官方常见问题</a></li></ul>
   </div></div>

@@ -5,5 +5,6 @@ export const site = {
   indexNowKey: 'f087dab7e1c4456ca9b12048ed335aa2',
   contact: 'https://github.com/159753a52/audacitycn/issues',
   repo: 'https://github.com/159753a52/audacitycn',
+  maintainer: { name: '159753a52', url: 'https://github.com/159753a52' },
   launched: '2026-10-07',
 };
