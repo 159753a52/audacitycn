@@ -3,13 +3,13 @@ import '../styles/global.css';
 import { site } from '../data/site';
 import BrandMark from '../components/BrandMark.astro';
 import Icon from '../components/Icon.astro';
-interface Props { title: string; description: string; noindex?: boolean; article?: boolean; published?: string; updated?: string; breadcrumbs?: { name: string; path: string }[]; }
-const { title, description, noindex = false, article = false, published, updated, breadcrumbs = [] } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; article?: boolean; published?: string; updated?: string; sources?: string[][]; breadcrumbs?: { name: string; path: string }[]; }
+const { title, description, noindex = false, article = false, published, updated, sources = [], breadcrumbs = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const path = Astro.url.pathname;
 const nav = [['/guides/', '使用教程'], ['/faq/', '常见问题'], ['/about/', '关于本站']];
 const organization = { '@type': 'Organization', '@id': `${site.url}/#organization`, name: site.name, url: site.url, logo: { '@type': 'ImageObject', url: `${site.url}/favicon.svg` }, sameAs: [site.repo] };
-const pageSchema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, datePublished: published, dateModified: updated, author: { '@type': 'Organization', name: site.name, url: `${site.url}/about/` }, publisher: organization } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN', publisher: organization };
+const pageSchema = article ? { '@context': 'https://schema.org', '@type': 'Article', headline: title, description, inLanguage: 'zh-CN', mainEntityOfPage: canonical, datePublished: published, dateModified: updated, citation: sources.map(([name, url]) => ({ '@type': 'CreativeWork', name, url })), author: { '@type': 'Organization', '@id': organization['@id'], name: site.name, url: `${site.url}/about/` }, publisher: organization } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description, url: canonical, inLanguage: 'zh-CN', publisher: organization };
 const schemas: Record<string, unknown>[] = [pageSchema];
 if (path === '/') schemas.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, alternateName: 'audacitycn.com', url: site.url, inLanguage: 'zh-CN', publisher: organization }, { '@context': 'https://schema.org', ...organization, description: '独立中文资料站，整理 Audacity 下载、操作步骤与问题排查，内容按官方手册核对。' });
 if (breadcrumbs.length) schemas.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ name: '首页', path: '/' }, ...breadcrumbs].map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: new URL(item.path, site.url).href })) });
